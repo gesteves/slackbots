@@ -7,7 +7,7 @@ class Weather
       unit_system = 'us'
     end
 
-    gmaps_response = HTTParty.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{URI::encode(location)}&sensor=false").body
+    gmaps_response = GoogleMaps.new.location(location)
     gmaps = JSON.parse(gmaps_response)
 
     response = if gmaps['status'] == 'OK'

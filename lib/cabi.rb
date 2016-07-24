@@ -1,13 +1,15 @@
 class Cabi
+  include ActiveSupport::Inflector
+
   def search(location)
-    gmaps_response = HTTParty.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{URI::encode(location)}&sensor=false").body
+    gmaps_response = GoogleMaps.new.location(location)
     gmaps = JSON.parse(gmaps_response)
 
     response = if gmaps['status'] == 'OK'
       lat = gmaps['results'][0]['geometry']['location']['lat']
       long = gmaps['results'][0]['geometry']['location']['lng']
 
-      doc = Nokogiri::XML(HTTParty.get('http://www.capitalbikeshare.com/data/stations/bikeStations.xml').body)
+      doc = Nokogiri::XML(get_station_info)
 
       # Sort stations by distance
       stations = doc.css('station').sort { |a,b| distance([lat, long], [a.at('lat').text.to_f, a.at('long').text.to_f]) <=> distance([lat, long], [b.at('lat').text.to_f, b.at('long').text.to_f]) }
@@ -31,7 +33,7 @@ class Cabi
     link = "https://maps.google.com?saddr=#{lat},#{long}&daddr=#{station_lat},#{station_long}&dirflg=w"
 
     attachments = []
-    attachment = { fallback: "The nearest Capital Bikeshare station with bikes is #{name}: #{link}", color: '#ff300b', pretext: "This is the nearest Capital Bikeshare station with bikes:", title: name, title_link: link, image_url: map_image(station_lat, station_long) }
+    attachment = { fallback: "The nearest Capital Bikeshare station with bikes is #{name}: #{link}", color: '#ff300b', pretext: "This is the nearest Capital Bikeshare station with bikes:", title: name, title_link: link, image_url: GoogleMaps.new.image(station_lat, station_long) }
     fields = []
     fields << { title: 'Available Bikes', value: bikes, short: true }
     fields << { title: 'Available Docks', value: docks, short: true }
@@ -59,7 +61,9 @@ class Cabi
     rm * c # Delta in meters
   end
 
-  def map_image(lat, long)
-    "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['MAPS_API_KEY']}&size=400x200&markers=#{lat},#{long}&scale=2"
+  def get_station_info
+    Rails.cache.fetch("cabi_station_info", expires_in: 5.minutes) do
+      HTTParty.get('http://www.capitalbikeshare.com/data/stations/bikeStations.xml').body
+    end
   end
 end

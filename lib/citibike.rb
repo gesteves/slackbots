@@ -1,6 +1,8 @@
 class Citibike
+  include ActiveSupport::Inflector
+
   def search(location)
-    gmaps_response = HTTParty.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{URI::encode(location)}&sensor=false").body
+    gmaps_response = GoogleMaps.new.location(location)
     gmaps = JSON.parse(gmaps_response)
 
     response = if gmaps['status'] == 'OK'
@@ -8,9 +10,9 @@ class Citibike
       long = gmaps['results'][0]['geometry']['location']['lng']
 
       # Get station info
-      station_info = JSON.parse(HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json').body)['data']['stations']
+      station_info = JSON.parse(get_station_info)['data']['stations']
       # Get station status
-      station_status = JSON.parse(HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_status.json').body)['data']['stations']
+      station_status = JSON.parse(get_station_status)['data']['stations']
 
       stations = (station_info + station_status).group_by { |s| s['station_id'] }.map { |k, v| v.reduce(:merge) }
 
@@ -37,7 +39,7 @@ class Citibike
     link = "https://maps.google.com?saddr=#{lat},#{long}&daddr=#{station_lat},#{station_long}&dirflg=w"
 
     attachments = []
-    attachment = { fallback: "The nearest Citibike station with bikes is #{name}: #{link}", color: '#1d5b97', pretext: "This is the nearest Citibike station with bikes:", title: name, title_link: link, image_url: map_image(station_lat, station_long) }
+    attachment = { fallback: "The nearest Citibike station with bikes is #{name}: #{link}", color: '#1d5b97', pretext: "This is the nearest Citibike station with bikes:", title: name, title_link: link, image_url: GoogleMaps.new.image(station_lat, station_long) }
     fields = []
     fields << { title: 'Available Bikes', value: bikes, short: true }
     fields << { title: 'Available Docks', value: docks, short: true }
@@ -65,7 +67,15 @@ class Citibike
     rm * c # Delta in meters
   end
 
-  def map_image(lat, long)
-    "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['MAPS_API_KEY']}&size=400x200&markers=#{lat},#{long}&scale=2"
+  def get_station_info
+    Rails.cache.fetch("citibike_station_info", expires_in: 24.hours) do
+      HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json').body
+    end
+  end
+
+  def get_station_status
+    Rails.cache.fetch("citibike_station_status", expires_in: 5.minutes) do
+      HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_status.json').body
+    end
   end
 end

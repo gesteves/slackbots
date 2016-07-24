@@ -1,9 +1,10 @@
 class Frink
   include ActionView::Helpers::TextHelper
+  include ActiveSupport::Inflector
 
   def search(query)
-    response = HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}")
-    results = JSON.parse(response.body)
+    response = search_frink(query)
+    results = JSON.parse(response)
     if results.size == 0
       text = "D'oh! No results found for that quote."
       response_type = 'ephemeral'
@@ -33,5 +34,11 @@ class Frink
   def closest_subtitle(text, subtitles)
     white = Text::WhiteSimilarity.new
     subtitles.max { |a, b| white.similarity(a['Content'], text) <=> white.similarity(b['Content'], text) }['Content']
+  end
+
+  def search_frink(query)
+    Rails.cache.fetch("frink:#{parameterize(query)}", expires_in: 5.minutes) do
+      HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}").body
+    end
   end
 end
