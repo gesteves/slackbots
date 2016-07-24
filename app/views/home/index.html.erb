@@ -3,25 +3,29 @@
 
 <div class="app">
 <h2>/weather</h2>
-<p>Uses the <a href="">forecast.io</a> API to show up-to-the-minute weather forecasts for the given location.</p>
+<%= image_tag 'weather' %>
+<p>Uses <a href="http://forecast.io/">forecast.io</a> to show up-to-the-minute weather forecasts for the given location.</p>
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['WEATHER_CLIENT_ID'] %>&amp;redirect_url=<%= weather_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
 <div class="app">
 <h2>/cabi</h2>
-<p>Finds <a href="">Capital Bikeshare</a> station with available bikes that’s closest to the given location in Washington, DC.</p>
+<%= image_tag 'cabi' %>
+<p>Finds the <a href="https://www.capitalbikeshare.com/">Capital Bikeshare</a> station with available bikes that’s closest to the given location in Washington, DC.</p>
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['CABI_CLIENT_ID'] %>&amp;redirect_url=<%= cabi_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
 <div class="app">
 <h2>/citibike</h2>
-<p>Finds <a href="">Citibike</a> station with available bikes that’s closest to the given location in New York City.</p>
+<%= image_tag 'citibike' %>
+<p>Finds the <a href="https://www.citibikenyc.com/">Citibike</a> station with available bikes that’s closest to the given location in New York City.</p>
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['CITIBIKE_CLIENT_ID'] %>&amp;redirect_url=<%= citibike_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
 <div class="app">
 <h2>/frink</h2>
-<p>Uses <a href="">Frinkiac</a> to search Simpsons gifs for a given quote from the show.</p>
+<%= image_tag 'frink' %>
+<p>Uses <a href="https://frinkiac.com/">Frinkiac</a> to search Simpsons gifs for a given quote from the show.</p>
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['FRINK_CLIENT_ID'] %>&amp;redirect_url=<%= frink_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
