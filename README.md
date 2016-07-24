@@ -25,3 +25,7 @@ Finds the Capital Bikeshare station with available bikes that’s closest to the
 Finds the Citibike station with available bikes that’s closest to the given location in New York City.
 
 ![](https://slackapps.herokuapp.com/assets/citibike-c2baa3e3e2ef884511d0a031237b62f50a8a0dc60802ebc2bf13b686e3aa8d76.png)
+
+### Credits
+
+Weather icons by [Adam Whitcroft](http://adamwhitcroft.com/climacons/). Bike icons adapted from Twitter's [Twemoji](https://github.com/twitter/twemoji).
