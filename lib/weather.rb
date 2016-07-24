@@ -28,7 +28,7 @@ class Weather
 
   def build_response(address, lat, long, forecast)
     attachments = []
-    attachment = { fallback: "Weather forecast for #{address}: http://forecast.io/#/f/#{lat},#{long}", color: color(forecast.currently, forecast.flags.units), pretext: "Weather forecast for <http://forecast.io/#/f/#{lat},#{long}|#{address}>:" }
+    attachment = { fallback: "Weather forecast for #{address}: http://forecast.io/#/f/#{lat},#{long}", color: color(forecast.currently, forecast.flags.units), title: "Weather forecast for #{address}", title_link: "http://forecast.io/#/f/#{lat},#{long}" }
     fields = []
 
     unless forecast.alerts.nil?
