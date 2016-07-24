@@ -1,4 +1,4 @@
-class Cabi
+class Citibike
   def search(location)
     gmaps_response = HTTParty.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{URI::encode(location)}&sensor=false").body
     gmaps = JSON.parse(gmaps_response)
@@ -7,12 +7,18 @@ class Cabi
       lat = gmaps['results'][0]['geometry']['location']['lat']
       long = gmaps['results'][0]['geometry']['location']['lng']
 
-      doc = Nokogiri::XML(HTTParty.get('http://www.capitalbikeshare.com/data/stations/bikeStations.xml').body)
+      # Get station info
+      station_info = JSON.parse(HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json').body)['data']['stations']
+      # Get station status
+      station_status = JSON.parse(HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_status.json').body)['data']['stations']
+
+      stations = (station_info + station_status).group_by { |s| s['station_id'] }.map { |k, v| v.reduce(:merge) }
 
       # Sort stations by distance
-      stations = doc.css('station').sort { |a,b| distance([lat, long], [a.at('lat').text.to_f, a.at('long').text.to_f]) <=> distance([lat, long], [b.at('lat').text.to_f, b.at('long').text.to_f]) }
+      stations.sort! { |a,b| distance([lat, long], [a['lat'], a['lon']]) <=> distance([lat, long], [b['lat'], b['lon']]) }
+
       # Get the first one that has > 0 bikes
-      station = stations.find { |s| s.at('nbBikes').text.to_i > 0 }
+      station = stations.find { |s| s['num_bikes_available'] > 0 }
 
       build_response(lat, long, station)
     else
@@ -23,15 +29,15 @@ class Cabi
   private
 
   def build_response(lat, long, station)
-    name = station.at('name').text
-    bikes = station.at('nbBikes').text
-    docks = station.at('nbEmptyDocks').text
-    station_lat = station.at('lat').text
-    station_long = station.at('long').text
+    name = station['name']
+    bikes = station['num_bikes_available']
+    docks = station['num_docks_available']
+    station_lat = station['lat']
+    station_long = station['lon']
     link = "https://maps.google.com?saddr=#{lat},#{long}&daddr=#{station_lat},#{station_long}&dirflg=w"
 
     attachments = []
-    attachment = { fallback: "The nearest Capital Bikeshare station with bikes is #{name}: #{link}", color: '#ff300b', pretext: "This is the nearest Capital Bikeshare station with bikes:", title: name, title_link: link, image_url: map_image(station_lat, station_long) }
+    attachment = { fallback: "The nearest Citibike station with bikes is #{name}: #{link}", color: '#1d5b97', pretext: "This is the nearest Citibike station with bikes:", title: name, title_link: link, image_url: map_image(station_lat, station_long) }
     fields = []
     fields << { title: 'Available Bikes', value: bikes, short: true }
     fields << { title: 'Available Docks', value: docks, short: true }
