@@ -37,7 +37,7 @@ class Frink
   end
 
   def search_frink(query)
-    Rails.cache.fetch("frink:#{parameterize(query)}", expires_in: 5.minutes) do
+    Rails.cache.fetch("frink:#{parameterize(query)}", expires_in: 24.hours) do
       HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}").body
     end
   end
