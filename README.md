@@ -1,24 +1,27 @@
-# README
+# Slack apps!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a small collection of Slack apps and slash commands I’ve put together over time. I hope you find some of them useful!
 
-Things you may want to cover:
+## /frink
 
-* Ruby version
+Uses Frinkiac to search Simpsons gifs for a given quote from the show.
 
-* System dependencies
+![](https://slackapps.herokuapp.com/assets/frink-29a8dfdc39552123be6ee32b9ac31981d22fe33e38bdfc3764af0e363ca0d13e.png)
 
-* Configuration
+## /weather
 
-* Database creation
+Uses [forecast.io](http://forecast.io/) to show up-to-the-minute weather forecasts for the given location.
 
-* Database initialization
+![](https://slackapps.herokuapp.com/assets/weather-8f055ba80c34dd266838d257102751d503670e75f68d44c005bfdfcc30525a4c.png)
 
-* How to run the test suite
+## /cabi
 
-* Services (job queues, cache servers, search engines, etc.)
+Finds the Capital Bikeshare station with available bikes that’s closest to the given location in Washington, DC.
 
-* Deployment instructions
+![](https://slackapps.herokuapp.com/assets/cabi-adb6a1e1dff4a8349a8ed2be9d9cd98a655642c32f1674f3da11be48e6f2e0dc.png)
 
-* ...
+## /citibike
+
+Finds the Citibike station with available bikes that’s closest to the given location in New York City.
+
+![](https://slackapps.herokuapp.com/assets/citibike-c2baa3e3e2ef884511d0a031237b62f50a8a0dc60802ebc2bf13b686e3aa8d76.png)
