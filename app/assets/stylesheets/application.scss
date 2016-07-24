@@ -29,3 +29,15 @@
   margin: 24px 0;
   padding: 24px 0;
 }
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #bf0222;
+}
+
+a:hover,
+a:active {
+  text-decoration: underline;
+}
