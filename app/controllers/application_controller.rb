@@ -7,10 +7,6 @@ class ApplicationController < ActionController::Base
   end
 
   def default_url_options
-    if Rails.env.production?
-      { host: ENV['HOST'] }
-    else
-      {}
-    end
+    { host: ENV['HOST'] }
   end
 end
