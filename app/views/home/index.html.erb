@@ -1,5 +1,12 @@
 <h1>Slack apps!</h1>
-<p>This is a small collection of Slack apps and slash commands I’ve put together. I hope you find some of them useful!</p>
+<p>This is a small collection of Slack apps and slash commands I’ve put together over time. I hope you find some of them useful!</p>
+
+<div class="app">
+<h2>/frink</h2>
+<%= image_tag 'frink.png' %>
+<p>Uses <a href="https://frinkiac.com/">Frinkiac</a> to search Simpsons gifs for a given quote from the show.</p>
+<a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['FRINK_CLIENT_ID'] %>&amp;redirect_url=<%= frink_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+</div>
 
 <div class="app">
 <h2>/weather</h2>
@@ -20,13 +27,6 @@
 <%= image_tag 'citibike.png' %>
 <p>Finds the <a href="https://www.citibikenyc.com/">Citibike</a> station with available bikes that’s closest to the given location in New York City.</p>
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['CITIBIKE_CLIENT_ID'] %>&amp;redirect_url=<%= citibike_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
-</div>
-
-<div class="app">
-<h2>/frink</h2>
-<%= image_tag 'frink.png' %>
-<p>Uses <a href="https://frinkiac.com/">Frinkiac</a> to search Simpsons gifs for a given quote from the show.</p>
-<a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['FRINK_CLIENT_ID'] %>&amp;redirect_url=<%= frink_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
 <p class="disclaimer">
