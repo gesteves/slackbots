@@ -5,4 +5,12 @@ class ApplicationController < ActionController::Base
     response = HTTParty.get("https://slack.com/api/oauth.access?code=#{code}&client_id=#{client_id}&client_secret=#{client_secret}&redirect_uri=#{redirect_uri}")
     JSON.parse(response.body)
   end
+
+  def default_url_options
+    if Rails.env.production?
+      { host: ENV['HOST'] }
+    else
+      {}
+    end
+  end
 end
