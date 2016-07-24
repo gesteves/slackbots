@@ -1,6 +1,6 @@
 # Slack apps!
 
-This is a small collection of Slack apps and slash commands I’ve put together over time. I hope you find some of them useful!
+This is a small collection of Slack apps and slash commands I’ve put together over time. I hope you find some of them useful! Visit https://slack.gesteves.com/ to install them.
 
 ## /frink
 
