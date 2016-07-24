@@ -1,0 +1,2 @@
+module FrinkHelper
+end
