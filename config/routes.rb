@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
+  get 'caniuse/slash'
+
   get 'home/index'
 
   post 'frink/slash'
   get  'frink/auth', as: 'frink_auth'
+
+  post 'caniuse/slash'
+  get  'caniuse/auth', as: 'caniuse_auth'
 
   post 'weather/slash'
   get  'weather/auth', as: 'weather_auth'
