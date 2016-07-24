@@ -26,6 +26,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'bourbon'
 gem 'autoprefixer-rails'
 gem 'httparty'
 gem 'figaro'
