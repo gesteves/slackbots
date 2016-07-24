@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'home/index'
+
   get  'frink/index'
   post 'frink/slash'
   get  'frink/auth', as: 'frink_auth'
@@ -11,5 +13,6 @@ Rails.application.routes.draw do
   get  'cabi/auth'   => 'capital_bikeshare#auth', as: 'cabi_auth'
   get  'cabi'        => 'capital_bikeshare#index'
 
+  root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

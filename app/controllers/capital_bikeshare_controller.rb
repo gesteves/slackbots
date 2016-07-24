@@ -1,9 +1,5 @@
 class CapitalBikeshareController < ApplicationController
 
-  def index
-    @page_title = '/cabi: Capital Bikeshare in Slack'
-  end
-
   def slash
     if params[:token] == ENV['CABI_VERIFICATION_TOKEN'] || Rails.env.development?
       query = params[:text].sub(/^\s*(in|for|at)\s+/, '').strip
@@ -19,24 +15,13 @@ class CapitalBikeshareController < ApplicationController
   end
 
   def auth
-    @page_title = 'Auth failed!'
     if params[:code].present?
-      token = get_access_token(params[:code])
-      if token['ok'].present?
-        @page_title = 'Success!'
-        render 'success'
-      else
-        render 'fail'
-      end
+      token = get_slack_access_token(params[:code], ENV['CABI_CLIENT_ID'], ENV['CABI_CLIENT_SECRET'], cabi_auth_url)
+      notice = token['ok'].present? ? 'The /cabi command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
-      render 'fail'
+      notice = 'Authentication failed. Try again!'
     end
+    redirect_to root_url, notice: notice
   end
 
-  private
-
-  def get_access_token(code)
-    response = HTTParty.get("https://slack.com/api/oauth.access?code=#{code}&client_id=#{ENV['CABI_CLIENT_ID']}&client_secret=#{ENV['CABI_CLIENT_SECRET']}&redirect_uri=#{cabi_auth_url}")
-    JSON.parse(response.body)
-  end
 end

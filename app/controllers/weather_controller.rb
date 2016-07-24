@@ -1,7 +1,4 @@
 class WeatherController < ApplicationController
-  def index
-    @page_title = '/weather: Weather Forecasts in Slack'
-  end
 
   def slash
     if params[:token] == ENV['WEATHER_VERIFICATION_TOKEN'] || Rails.env.development?
@@ -18,24 +15,12 @@ class WeatherController < ApplicationController
   end
 
   def auth
-    @page_title = 'Auth failed!'
     if params[:code].present?
-      token = get_access_token(params[:code])
-      if token['ok'].present?
-        @page_title = 'Success!'
-        render 'success'
-      else
-        render 'fail'
-      end
+      token = get_slack_access_token(params[:code], ENV['WEATHER_CLIENT_ID'], ENV['WEATHER_CLIENT_SECRET'], weather_auth_url)
+      notice = token['ok'].present? ? 'The /weather command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
-      render 'fail'
+      notice = 'Authentication failed. Try again!'
     end
-  end
-
-  private
-
-  def get_access_token(code)
-    response = HTTParty.get("https://slack.com/api/oauth.access?code=#{code}&client_id=#{ENV['WEATHER_CLIENT_ID']}&client_secret=#{ENV['WEATHER_CLIENT_SECRET']}&redirect_uri=#{weather_auth_url}")
-    JSON.parse(response.body)
+    redirect_to root_url, notice: notice
   end
 end
