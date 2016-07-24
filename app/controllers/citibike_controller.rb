@@ -4,7 +4,7 @@ class CitibikeController < ApplicationController
     if params[:token] == ENV['CITIBIKE_VERIFICATION_TOKEN'] || Rails.env.development?
       query = params[:text].sub(/^\s*(in|for|at)\s+/, '').strip
       if query == '' || query == 'help'
-        response = { text: 'Enter an address to find the closest Citibike dock with bikes. For example, `/citibike near 350 5th Ave, New York`', response_type: 'ephemeral' }
+        response = { text: "Enter an address to find the closest Citibike dock with bikes. For example, `#{params[:command]} near 350 5th Ave, New York`", response_type: 'ephemeral' }
       else
         response = Citibike.new.search(query)
       end
