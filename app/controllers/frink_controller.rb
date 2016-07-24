@@ -4,7 +4,7 @@ class FrinkController < ApplicationController
     if params[:token] == ENV['FRINK_VERIFICATION_TOKEN'] || Rails.env.development?
       query = params[:text].strip
       if query == '' || query == 'help'
-        response = { text: "D'oh! You have to enter a quote from The Simpsons, like `#{params[:command]} everything's comin' up Milhouse!`", response_type: 'ephemeral' }
+        response = { text: "Type a quote from The Simpsons to find it in gif form, like `#{params[:command]} everything's comin' up Milhouse!`", response_type: 'ephemeral' }
       else
         response = Frink.new.search(query)
       end
