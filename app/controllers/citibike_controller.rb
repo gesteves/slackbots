@@ -17,7 +17,7 @@ class CitibikeController < ApplicationController
   def auth
     if params[:code].present?
       token = get_slack_access_token(params[:code], ENV['CITIBIKE_CLIENT_ID'], ENV['CITIBIKE_CLIENT_SECRET'], citibike_auth_url)
-      notice = token['ok'].present? ? 'The /cabi command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
+      notice = token['ok'].present? ? 'The /citibike command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
       notice = 'Authentication failed. Try again!'
     end
