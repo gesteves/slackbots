@@ -8,6 +8,12 @@ Uses Frinkiac to search Simpsons gifs for a given quote from the show.
 
 ![](https://slackapps.herokuapp.com/assets/frink-29a8dfdc39552123be6ee32b9ac31981d22fe33e38bdfc3764af0e363ca0d13e.png)
 
+## /caniuse
+
+Searches caniuse.com for browser support data for new front-end web technologies.
+
+![](https://slack.gesteves.com/assets/caniuse-bd5187c23d2985ac53955fec00fcdba8f0dd3b03c52fdc85e936e5df7185b77a.png)
+
 ## /weather
 
 Uses [forecast.io](http://forecast.io/) to show up-to-the-minute weather forecasts for the given location.
@@ -28,4 +34,4 @@ Finds the Citibike station with available bikes that’s closest to the given lo
 
 ### Credits
 
-Weather icons by [Adam Whitcroft](http://adamwhitcroft.com/climacons/). Bike icons adapted from Twitter's [Twemoji](https://github.com/twitter/twemoji).
+Weather icons by [Adam Whitcroft](http://adamwhitcroft.com/climacons/). Bike & chart icons adapted from Twitter's [Twemoji](https://github.com/twitter/twemoji).
