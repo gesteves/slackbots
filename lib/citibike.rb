@@ -68,7 +68,7 @@ class Citibike
   end
 
   def get_station_info
-    Rails.cache.fetch("citibike_station_info", expires_in: 24.hours) do
+    Rails.cache.fetch("citibike_station_info", expires_in: 1.week) do
       HTTParty.get('https://gbfs.citibikenyc.com/gbfs/en/station_information.json').body
     end
   end

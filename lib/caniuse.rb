@@ -60,14 +60,14 @@ class Caniuse
   end
 
   def get_status_name(code)
-    Rails.cache.fetch("caniuse:status_names", expires_in: 24.hours) do
+    Rails.cache.fetch("caniuse:status_names", expires_in: 1.week) do
       caniuse_data = JSON.parse(get_caniuse_data)
       caniuse_data['statuses'][code]
     end
   end
 
   def get_caniuse_data
-    Rails.cache.fetch("caniuse:data", expires_in: 24.hours) do
+    Rails.cache.fetch("caniuse:data", expires_in: 1.week) do
       HTTParty.get('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json').body
     end
   end
