@@ -8,6 +8,7 @@ class WeatherController < ApplicationController
       else
         response = Weather.new.search(query)
       end
+      $mixpanel.track(params[:user_id], params[:command], 'Search': params[:text])
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401

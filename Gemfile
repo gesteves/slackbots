@@ -30,6 +30,9 @@ gem 'text'
 gem 'figaro'
 gem 'newrelic_rpm'
 
+# Tracking
+gem 'mixpanel-ruby'
+
 group :production do
   gem 'pg'
   gem 'lograge'
