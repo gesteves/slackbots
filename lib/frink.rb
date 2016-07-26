@@ -26,7 +26,8 @@ class Frink
     episode = body['Frame']['Episode']
     timestamp = body['Frame']['Timestamp'].to_i
     subtitle = closest_subtitle(query, body['Subtitles'])
-    image = "https://frinkiac.com/gif/#{episode}/#{timestamp - 1000}/#{timestamp + 1000}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: 25))}"
+    duration = (ENV['FRINK_GIF_DURATION'].to_i * 1000) / 2
+    image = "https://frinkiac.com/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: 25))}"
     return image, subtitle
   end
 
