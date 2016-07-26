@@ -28,6 +28,7 @@ gem 'text'
 
 # For Heroku
 gem 'figaro'
+gem 'newrelic_rpm'
 
 group :production do
   gem 'pg'
