@@ -3,7 +3,8 @@ class Frink
   include ActiveSupport::Inflector
 
   def search(query)
-    results = search_frink(query)
+    response = search_frink(query)
+    results = JSON.parse(response)
     if results.size == 0
       text = "D'oh! No results found for that quote."
       response_type = 'ephemeral'
@@ -38,8 +39,7 @@ class Frink
 
   def search_frink(query)
     Rails.cache.fetch("frink:#{parameterize(query)}", expires_in: 24.hours) do
-      response = HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}").body
+      HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}").body
     end
-    JSON.parse(response).reject { |e| e['Episode'] =~ /S1[^0]E\d+/ } # Reject results after season 10 DON'T @ ME
   end
 end
