@@ -7,7 +7,7 @@ class CaniuseController < ApplicationController
       else
         response = Caniuse.new.search(query)
       end
-      $mixpanel.track(params[:user_id], params[:command], 'Search': params[:text])
+      $mixpanel.track(params[:user_id], params[:command])
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
