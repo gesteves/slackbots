@@ -36,13 +36,6 @@
 <a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['CITIBIKE_CLIENT_ID'] %>&amp;redirect_url=<%= citibike_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
 </div>
 
-<div class="app">
-<h2 id="beer">/beer</h2>
-<%= image_tag 'beer.png' %>
-<p>Uses <a href="https://untappd.com">Untappd</a> to find information about beers.</p>
-<a class="button" href="https://slack.com/oauth/authorize?scope=commands&client_id=<%= ENV['BEER_CLIENT_ID'] %>&amp;redirect_url=<%= beer_auth_url %>"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
-</div>
-
 <p class="disclaimer">
   None of your Slack team’s private information (such as names, channels, messages, etc.) is accessed or stored in any way.<br/>
   This app is not affiliated with Slack, Capital Bikeshare, Citibike, forecast.io, Frinkiac, or anyone else, really.<br/>
