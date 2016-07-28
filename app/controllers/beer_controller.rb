@@ -16,7 +16,7 @@ class BeerController < ApplicationController
 
   def auth
     if params[:code].present?
-      token = get_slack_access_token(params[:code], ENV['BEER_CLIENT_ID'], ENV['BEER_CLIENT_SECRET'], cabi_auth_url)
+      token = get_slack_access_token(params[:code], ENV['BEER_CLIENT_ID'], ENV['BEER_CLIENT_SECRET'], beer_auth_url)
       notice = token['ok'].present? ? 'The /untappd command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
       notice = 'Authentication failed. Try again!'
