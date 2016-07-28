@@ -1,6 +1,6 @@
-class UntappdController < ApplicationController
+class BeerController < ApplicationController
   def slash
-    if params[:token] == ENV['UNTAPPD_VERIFICATION_TOKEN'] || Rails.env.development?
+    if params[:token] == ENV['BEER_VERIFICATION_TOKEN'] || Rails.env.development?
       query = params[:text].strip
       if query == '' || query == 'help'
         response = { text: "Search for a beer by brewery and beer name. For example, `#{params[:command]} Firestone Walker Double Jack`", response_type: 'ephemeral' }
@@ -16,7 +16,7 @@ class UntappdController < ApplicationController
 
   def auth
     if params[:code].present?
-      token = get_slack_access_token(params[:code], ENV['UNTAPPD_CLIENT_ID'], ENV['UNTAPPD_CLIENT_SECRET'], cabi_auth_url)
+      token = get_slack_access_token(params[:code], ENV['BEER_CLIENT_ID'], ENV['BEER_CLIENT_SECRET'], cabi_auth_url)
       notice = token['ok'].present? ? 'The /untappd command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
       notice = 'Authentication failed. Try again!'

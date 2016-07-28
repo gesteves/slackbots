@@ -18,8 +18,8 @@ Rails.application.routes.draw do
   post 'cabi/slash' => 'capital_bikeshare#slash'
   get  'cabi/auth'  => 'capital_bikeshare#auth', as: 'cabi_auth'
 
-  post 'untappd/slash'
-  get  'untappd/auth', as: 'untappd_auth'
+  post 'beer/slash'
+  get  'beer/auth', as: 'beer_auth'
 
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
