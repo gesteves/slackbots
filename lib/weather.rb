@@ -65,8 +65,8 @@ class Weather
 
     attachment[:fields] = fields
 
-    if !forecast.currently.nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'sleet', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(forecast.currently.icon)
-      image_path = ActionController::Base.helpers.image_path("icons/#{forecast.currently.icon}.png")
+    if !forecast.currently.nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(forecast.currently.icon)
+      image_path = ActionController::Base.helpers.image_path("weather/#{forecast.currently.icon}.png")
       attachment[:thumb_url] = "https://#{ENV['HOST']}/#{image_path}"
     end
 
