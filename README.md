@@ -18,7 +18,7 @@ Searches caniuse.com for browser support data for new front-end web technologies
 
 Uses [forecast.io](http://forecast.io/) to show up-to-the-minute weather forecasts for the given location.
 
-![](https://slackapps.herokuapp.com/assets/weather-8f055ba80c34dd266838d257102751d503670e75f68d44c005bfdfcc30525a4c.png)
+![](https://slack.gesteves.com/assets/weather-78ea7dec9d624a3f8caa5206c55acbe608a84bbaf551fe698e1e03f171d35d58.png)
 
 ## /cabi
 
@@ -34,4 +34,4 @@ Finds the Citibike station with available bikes that’s closest to the given lo
 
 ### Credits
 
-Weather icons by [Adam Whitcroft](http://adamwhitcroft.com/climacons/). Bike & chart icons adapted from Twitter's [Twemoji](https://github.com/twitter/twemoji).
+[Twemoji](https://github.com/twitter/twemoji) icons by [Twitter](https://github.com/twitter), licensed under [CC-BY](https://creativecommons.org/licenses/by/4.0/).
