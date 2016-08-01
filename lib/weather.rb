@@ -46,11 +46,6 @@ class Weather
       fields << { title: 'Right now', value: now_text }
     end
 
-    unless forecast.daily.nil?
-      today = forecast.daily.data[0]
-      fields << { title: 'Today', value: "#{today.summary.force_encoding('UTF-8')} Low #{today.temperatureMin.round}° at #{Time.at(today.temperatureMinTime).strftime('%I:%M %p')}, high #{today.temperatureMax.round}° at #{Time.at(today.temperatureMaxTime).strftime('%I:%M %p')}." }
-    end
-
     unless forecast.minutely.nil?
       fields << { title: 'Next hour', value: forecast.minutely.summary.force_encoding('UTF-8') }
     end
