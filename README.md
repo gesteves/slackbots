@@ -18,7 +18,7 @@ Searches caniuse.com for browser support data for new front-end web technologies
 
 Uses [forecast.io](http://forecast.io/) to show up-to-the-minute weather forecasts for the given location.
 
-![](https://slack.gesteves.com/assets/weather-78ea7dec9d624a3f8caa5206c55acbe608a84bbaf551fe698e1e03f171d35d58.png)
+![](https://slack.gesteves.com/assets/weather-d7ad3aa98ea7428e150e2dcb64f68793bd9cf687f8811b076e228453a858458e.png)
 
 ## /cabi
 
