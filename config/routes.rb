@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   post 'beer/slash'
   get  'beer/auth', as: 'beer_auth'
 
+  post 'metro/slash'
+  get  'metro/auth', as: 'metro_auth'
+
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
