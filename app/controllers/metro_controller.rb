@@ -16,7 +16,7 @@ class MetroController < ApplicationController
 
   def auth
     if params[:code].present?
-      token = get_slack_access_token(params[:code], ENV['METRO_CLIENT_ID'], ENV['METRO_CLIENT_SECRET'], beer_auth_url)
+      token = get_slack_access_token(params[:code], ENV['METRO_CLIENT_ID'], ENV['METRO_CLIENT_SECRET'], metro_auth_url)
       notice = token['ok'].present? ? 'The /metro command has been added to your Slack. Yay!' : 'Authentication failed. Try again!'
     else
       notice = 'Authentication failed. Try again!'
