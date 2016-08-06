@@ -13,7 +13,6 @@ class Untappd
       author_link = "https://untappd.com/w/#{result['brewery']['brewery_slug']}/#{result['brewery']['brewery_id']}"
       description = result['beer']['beer_description']
       image = result['beer']['beer_label']
-      ts = DateTime.parse(result['beer']['created_at']).to_i
 
       fields = []
       fields << { title: 'Style', value: result['beer']['beer_style'] } if result['beer']['beer_style'].present?
@@ -31,9 +30,7 @@ class Untappd
             title_link: title_link,
             thumb_url: image,
             text: description,
-            fields: fields,
-            footer: 'Added',
-            ts: ts
+            fields: fields
           }
         ]
       }
