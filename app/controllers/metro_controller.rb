@@ -7,7 +7,7 @@ class MetroController < ApplicationController
       else
         response = Wmata.new.station(query)
       end
-      $mixpanel.track(params[:user_id], params[:command])
+      $mixpanel.track(params[:user_id], params[:command]) unless Rails.env.development?
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
