@@ -27,7 +27,9 @@ class Frink
   private
 
   def screencap(query, episode, timestamp)
-    response = HTTParty.get("#{@site}/api/caption?e=#{episode}&t=#{timestamp}")
+    response = Rails.cache.fetch("frinkiac:#{@site}:caption:#{episode}:#{timestamp}", expires_in: 24.hours) do
+      HTTParty.get("#{@site}/api/caption?e=#{episode}&t=#{timestamp}")
+    end
     body = JSON.parse(response.body)
     episode = body['Frame']['Episode']
     timestamp = body['Frame']['Timestamp'].to_i
@@ -42,7 +44,7 @@ class Frink
   end
 
   def search_frink(query)
-    response = Rails.cache.fetch("frinkiac:#{@site}:#{parameterize(query)}", expires_in: 24.hours) do
+    response = Rails.cache.fetch("frinkiac:#{@site}:search:#{parameterize(query)}", expires_in: 24.hours) do
       HTTParty.get("#{@site}/api/search?q=#{URI.escape(query)}").body
     end
     JSON.parse(response).reject { |e| e['Episode'] =~ /S1[^0]E\d+/ } # Reject results after season 10 DON'T @ ME
