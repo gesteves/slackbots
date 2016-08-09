@@ -32,14 +32,13 @@ class Frink
     episode = body['Frame']['Episode']
     timestamp = body['Frame']['Timestamp'].to_i
     subtitle = closest_subtitle(query, body['Subtitles'])
-    duration = (ENV['FRINK_GIF_DURATION'].to_i * 1000) / 2
-    image = "#{@site}/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: @line_width))}"
-    return image, subtitle
+    image = "#{@site}gif/#{episode}/#{subtitle['StartTimestamp']}/#{subtitle['EndTimestamp']}.gif?lines=#{URI.escape(word_wrap(subtitle['Content'], line_width: @line_width))}"
+    return image, subtitle['Content']
   end
 
   def closest_subtitle(text, subtitles)
     white = Text::WhiteSimilarity.new
-    subtitles.max { |a, b| white.similarity(a['Content'], text) <=> white.similarity(b['Content'], text) }['Content']
+    subtitles.max { |a, b| white.similarity(a['Content'], text) <=> white.similarity(b['Content'], text) }
   end
 
   def search_frink(query)
