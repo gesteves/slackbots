@@ -3,8 +3,9 @@ class Frink
   include ActiveSupport::Inflector
 
   def initialize(opts = {})
-    opts.reverse_merge!(site: 'https://frinkiac.com/')
+    opts.reverse_merge!(site: 'https://frinkiac.com/', line_width: 25)
     @site = opts[:site]
+    @line_width = opts[:line_width]
   end
 
   def search(query)
@@ -32,7 +33,7 @@ class Frink
     timestamp = body['Frame']['Timestamp'].to_i
     subtitle = closest_subtitle(query, body['Subtitles'])
     duration = (ENV['FRINK_GIF_DURATION'].to_i * 1000) / 2
-    image = "#{@site}/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: 25))}"
+    image = "#{@site}/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: @line_width))}"
     return image, subtitle
   end
 
