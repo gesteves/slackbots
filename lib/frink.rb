@@ -20,7 +20,7 @@ class Frink
       text = "<#{image}|#{subtitle}>"
       response_type = 'in_channel'
     end
-    { text: text, response_type: response_type, link_names: 1 }
+    { text: text, response_type: response_type, link_names: 1, unfurl_links: true }
   end
 
   private
