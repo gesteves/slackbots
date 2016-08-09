@@ -2,6 +2,11 @@ class Frink
   include ActionView::Helpers::TextHelper
   include ActiveSupport::Inflector
 
+  def initialize(opts = {})
+    opts.reverse_merge!(site: 'https://frinkiac.com/')
+    @site = opts[:site]
+  end
+
   def search(query)
     results = search_frink(query)
     if results.size == 0
@@ -21,13 +26,13 @@ class Frink
   private
 
   def screencap(query, episode, timestamp)
-    response = HTTParty.get("https://frinkiac.com/api/caption?e=#{episode}&t=#{timestamp}")
+    response = HTTParty.get("#{@site}/api/caption?e=#{episode}&t=#{timestamp}")
     body = JSON.parse(response.body)
     episode = body['Frame']['Episode']
     timestamp = body['Frame']['Timestamp'].to_i
     subtitle = closest_subtitle(query, body['Subtitles'])
     duration = (ENV['FRINK_GIF_DURATION'].to_i * 1000) / 2
-    image = "https://frinkiac.com/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: 25))}"
+    image = "#{@site}/gif/#{episode}/#{timestamp - duration}/#{timestamp + duration}.gif?lines=#{URI.escape(word_wrap(subtitle, line_width: 25))}"
     return image, subtitle
   end
 
@@ -37,8 +42,8 @@ class Frink
   end
 
   def search_frink(query)
-    response = Rails.cache.fetch("frink:#{parameterize(query)}", expires_in: 24.hours) do
-      HTTParty.get("https://frinkiac.com/api/search?q=#{URI.escape(query)}").body
+    response = Rails.cache.fetch("frinkiac:#{@site}:#{parameterize(query)}", expires_in: 24.hours) do
+      HTTParty.get("#{@site}/api/search?q=#{URI.escape(query)}").body
     end
     JSON.parse(response).reject { |e| e['Episode'] =~ /S1[^0]E\d+/ } # Reject results after season 10 DON'T @ ME
   end

@@ -6,7 +6,8 @@ class FrinkController < ApplicationController
       if query == '' || query == 'help'
         response = { text: "Type a quote from The Simpsons to find it in gif form, like `#{params[:command]} everything's comin' up Milhouse!`", response_type: 'ephemeral' }
       else
-        response = Frink.new.search(query)
+        frink = Frink.new
+        response = frink.search(query)
       end
       $mixpanel.track(params[:user_id], params[:command])
       render json: response, status: 200

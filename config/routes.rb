@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   post 'frink/slash'
   get  'frink/auth', as: 'frink_auth'
 
+  post 'morbo/slash'
+  get  'morbo/auth', as: 'morbo_auth'
+
   post 'caniuse/slash'
   get  'caniuse/auth', as: 'caniuse_auth'
 
