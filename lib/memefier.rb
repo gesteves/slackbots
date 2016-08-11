@@ -41,7 +41,7 @@ class Memefier
         json = JSON.parse(HTTParty.get(Ix.path(url).to_url(palette: 'json')).body)
         palette_response(json)
       rescue
-        { text: 'Uh oh, something went wrong! Are you sure that’s an image?', response_type: 'ephemeral' }
+        { text: 'Uh oh, something went wrong!', response_type: 'ephemeral' }
       end
     end
   end
@@ -61,7 +61,7 @@ class Memefier
 
     attachment[:fields] = fields
     attachments << attachment
-    { response_type: 'in_channel', attachments: attachments, text: 'Here’s the color palette & dominant colors for your image:' }
+    { response_type: 'in_channel', attachments: attachments, text: 'Here’s the color palette & dominant colors for your image:', unfurl_links: true }
   end
 
 end
