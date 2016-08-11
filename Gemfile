@@ -25,6 +25,7 @@ gem 'dalli'
 gem 'httparty'
 gem 'forecast_io'
 gem 'text'
+gem 'imgix'
 
 # For Heroku
 gem 'figaro'
