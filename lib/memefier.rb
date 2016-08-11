@@ -1,5 +1,6 @@
 class Memefier
   include ActionView::Helpers::TextHelper
+  include ActiveSupport::Inflector
 
   def memefy(query)
     original_url = URI.extract(query).try(:first)
@@ -29,6 +30,38 @@ class Memefier
       url = Ix.path(original_url).to_url(opts)
       { text: "<#{url}|#{text}>", response_type: 'in_channel' }
     end
+  end
+
+  def palette(query)
+    url = URI.extract(query).try(:first)
+    if url.nil?
+      { text: 'You need to include an image URL!', response_type: 'ephemeral' }
+    else
+      begin
+        json = JSON.parse(HTTParty.get(Ix.path(url).to_url(palette: 'json')).body)
+        palette_response(json)
+      rescue
+        { text: 'Uh oh, something went wrong! Are you sure that’s an image?', response_type: 'ephemeral' }
+      end
+    end
+  end
+
+  private
+
+  def palette_response(json)
+    attachments = []
+    attachment = { fallback: "Here’s the color palette: #{json['colors'].map { |c| c['hex']}.join(', ')}" }
+    attachment[:color] = json['dominant_colors']['vibrant']['hex'] if json['dominant_colors']['vibrant'].present?
+    fields = []
+    fields << { title: 'Color Palette', value: json['colors'].map { |c| c['hex']}.join(', ') }
+
+    json['dominant_colors'].each do |k, v|
+      fields << { title: titleize(k), value: v['hex'], short: true }
+    end
+
+    attachment[:fields] = fields
+    attachments << attachment
+    { response_type: 'in_channel', attachments: attachments, text: 'Here’s the color palette & dominant colors for your image:' }
   end
 
 end
