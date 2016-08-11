@@ -49,15 +49,19 @@ class Memefier
   private
 
   def palette_response(json)
+    attachments = []
+    attachment = { fallback: "Here’s the color palette: #{json['colors'].map { |c| c['hex']}.join(', ')}" }
+    attachment[:color] = json['dominant_colors']['vibrant']['hex'] if json['dominant_colors']['vibrant'].present?
+    fields = []
+    fields << { title: 'Color Palette', value: json['colors'].map { |c| c['hex']}.join(', ') }
 
-    palette = json['colors'].map { |c| c['hex']}
-    dominant = []
-    json['dominant_colors'].each { |k,v| dominant << "#{titleize(k)}: #{v['hex']}" }
+    json['dominant_colors'].each do |k, v|
+      fields << { title: titleize(k), value: v['hex'], short: true }
+    end
 
-    response = "Color Palette: #{palette.join(', ')}\n\n"
-    response += "Dominant colors:\n#{dominant.join("\n")}"
-
-    { response_type: 'in_channel', text: response }
+    attachment[:fields] = fields
+    attachments << attachment
+    { response_type: 'in_channel', attachments: attachments, text: 'Here’s the color palette & dominant colors for your image:' }
   end
 
 end
