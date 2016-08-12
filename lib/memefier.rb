@@ -3,7 +3,6 @@ class Memefier
   include ActiveSupport::Inflector
 
   def memefy(query, opts = {})
-    opts.reverse_merge!(url_only: false)
     original_url = URI.extract(query).try(:first)
     text = query.gsub(original_url, '').strip unless original_url.nil?
     if original_url.nil?
@@ -29,11 +28,7 @@ class Memefier
         markalign: 'bottom,center'
       }
       url = Ix.path(original_url).to_url(opts)
-      if opts[:url_only]
-        url
-      else
-        { text: "<#{url}|#{text}>", response_type: 'in_channel' }
-      end
+      { text: "<#{url}|#{text}>", response_type: 'in_channel' }
     end
   end
 
