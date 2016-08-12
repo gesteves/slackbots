@@ -6,9 +6,10 @@ class MemefierController < ApplicationController
       if query == '' || query == 'help'
         response = { text: "Type a publicly accessible image URL and the quote you want to put on it", response_type: 'ephemeral' }
       else
-        response = Memefier.new.memefy(query)
+        url_only = params[:url_only].present? && params[:url_only] == '1'
+        response = Memefier.new.memefy(query, url_only)
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present? 
+      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
