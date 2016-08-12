@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get  'metro/auth', as: 'metro_auth'
 
   post 'memefier/memefy'
+  get  'memefier/memefy'
   post 'memefier/palette'
   get  'memefier/auth', as: 'memefier_auth'
 
