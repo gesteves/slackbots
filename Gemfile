@@ -26,6 +26,7 @@ gem 'httparty'
 gem 'forecast_io'
 gem 'text'
 gem 'imgix'
+gem 'gemoji'
 
 # For Heroku
 gem 'figaro'

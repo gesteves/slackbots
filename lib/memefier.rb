@@ -3,7 +3,7 @@ class Memefier
   include ActiveSupport::Inflector
 
   def memefy(query, opts = {})
-    original_url = URI.extract(query).try(:first)
+    original_url = URI.extract(query, ['http', 'https']).try(:first)
     text = query.gsub(original_url, '').strip unless original_url.nil?
     if original_url.nil?
       { text: 'You need to include an image to memefy!', response_type: 'ephemeral' }
@@ -12,7 +12,7 @@ class Memefier
     else
       text_opts = {
         w: 600,
-        txt64: text,
+        txt64: emojify(text),
         txtfont64: 'Impact',
         txtclr: 'fff',
         txtlineclr: '000',
@@ -47,6 +47,10 @@ class Memefier
   end
 
   private
+
+  def emojify(text)
+    text.gsub(/:([\w-]+):/) { |e| Emoji.find_by_alias($1).present? ? Emoji.find_by_alias($1).raw : '' }
+  end
 
   def palette_response(json)
     attachments = []
