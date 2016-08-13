@@ -16,7 +16,7 @@ class Memefier
         txtfont64: 'Impact',
         txtclr: 'fff',
         txtlineclr: '000',
-        txtsize: 60,
+        txtsize: 72,
         txtline: 2,
         txtalign: 'center'
       }
