@@ -11,7 +11,7 @@ class Memefier
       { text: 'You need to include a text for the image!', response_type: 'ephemeral' }
     else
       text_opts = {
-        w: 600,
+        w: 1000,
         txt64: emojify(text),
         txtfont64: 'Impact',
         txtclr: 'fff',
@@ -23,7 +23,7 @@ class Memefier
       text_url = Ix.path('~text').to_url(text_opts)
       puts text_url
       opts = {
-        w: 600,
+        w: 1000,
         mark64: text_url,
         markalign: 'bottom,center'
       }
