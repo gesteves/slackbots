@@ -3,8 +3,6 @@ ruby '2.3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
-# Use Puma as the app server
-gem 'puma', '~> 3.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
@@ -36,6 +34,7 @@ gem 'newrelic_rpm'
 gem 'mixpanel-ruby'
 
 group :production do
+  gem 'passenger'
   gem 'pg'
   gem 'lograge'
 end
