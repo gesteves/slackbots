@@ -16,7 +16,7 @@ class Memefier
         txtfont64: 'Impact',
         txtclr: 'fff',
         txtlineclr: '000',
-        txtsize: 72,
+        txtsize: text_size(emojify(text)),
         txtline: 2,
         txtalign: 'center'
       }
@@ -47,6 +47,17 @@ class Memefier
   end
 
   private
+
+  def text_size(text)
+    case text.size
+    when 0..100
+      80
+    when 101..200
+      60
+    else
+      40
+    end
+  end
 
   def emojify(text)
     text.gsub(/:([\w-]+):/) { |e| Emoji.find_by_alias($1).present? ? Emoji.find_by_alias($1).raw : '' }
