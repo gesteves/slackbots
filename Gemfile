@@ -27,7 +27,6 @@ gem 'gemoji'
 
 # For Heroku
 gem 'figaro'
-gem 'newrelic_rpm'
 
 # Tracking
 gem 'mixpanel-ruby'

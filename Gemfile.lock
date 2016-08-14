@@ -105,7 +105,6 @@ GEM
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    newrelic_rpm (3.16.0.318)
     nio4r (1.2.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -204,7 +203,6 @@ DEPENDENCIES
   listen (~> 3.1)
   lograge
   mixpanel-ruby
-  newrelic_rpm
   passenger
   pg
   rails (~> 5.0.0)
