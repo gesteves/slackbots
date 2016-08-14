@@ -21,7 +21,9 @@
   <body>
     <div class="container">
       <% flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, class: "alert alert--#{name}" %>
+        <div class="flash <%= "flash--#{name}" %>">
+          <p class="flash__message"><%= msg %></p>
+        </div>
       <% end -%>
 
       <%= yield %>

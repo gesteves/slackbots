@@ -1,8 +1,10 @@
 @import 'vendors/reset';
 @import 'utils/vars';
+@import 'utils/functions';
+@import 'utils/mixins';
 @import 'base/base';
 @import 'blocks/container';
 @import 'blocks/header';
-@import 'blocks/alert';
+@import 'blocks/flash';
 @import 'blocks/app';
 @import 'blocks/footer';
