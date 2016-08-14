@@ -8,7 +8,6 @@ gem 'rails', '~> 5.0.0'
 gem 'jbuilder', '~> 2.5'
 
 # Front-end
-gem 'bourbon'
 gem 'autoprefixer-rails'
 gem 'turbolinks', '~> 5'
 gem 'jquery-rails'
