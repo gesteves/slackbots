@@ -9,6 +9,26 @@
 
   p {
     font-size: 20px;
+    margin: 1rem 0;
     line-height: 1.5;
+  }
+}
+
+p.header__sign {
+  @extend %serif;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 100;
+  text-transform: none;
+
+  a:link,
+  a:visited {
+    color: $color-text;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:active {
+    color: $color-links;
   }
 }
