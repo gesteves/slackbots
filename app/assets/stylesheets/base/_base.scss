@@ -1,0 +1,70 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  @extend %serif;
+  color: $color-text;
+  font-weight: 300;
+}
+
+%sans-serif {
+  font-family: 'Helvetica Neue', sans-serif;
+
+  .wf-active & {
+    font-family: $font-sans-serif;
+  }
+}
+
+%serif {
+  font-family: 'Georgia', serif;
+
+  .wf-active & {
+    font-family: $font-serif;
+  }
+}
+
+h1,
+h2,
+h3 {
+  @extend %sans-serif;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #bf0222;
+}
+
+a:hover,
+a:active {
+  text-decoration: underline;
+}
+
+h1,
+h2 {
+  i {
+    @extend %serif;
+    color: #999;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 100;
+    text-transform: none;
+
+    a:link,
+    a:visited {
+      color: $color-alt-text;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:active {
+      color: $color-links;
+    }
+  }
+}

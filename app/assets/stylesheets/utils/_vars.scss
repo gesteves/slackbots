@@ -1,0 +1,26 @@
+// Colors
+$color-text            : #333;
+$color-heading         : #333;
+$color-links           : #BF0222;
+$color-header-text     : #000;
+$color-alt-text        : #999;
+$color-very-light-gray : #DDD;
+$color-background      : #FDFDFD;
+
+// Fonts
+$font-sans-serif       : 'proxima-nova', sans-serif;
+$font-serif            : 'calluna', serif;
+
+// Misc.
+$border                : 2px solid $color-heading;
+
+// Breakpoints
+
+$bp-xs                 : 320px;
+$bp-s                  : 400px;
+$bp-m                  : 600px;
+$bp-l                  : 800px;
+$bp-xl                 : 1000px;
+$bp-xxl                : 1280px;
+$bp-xxxl               : 1440px;
+$bp-max                : 1920px;

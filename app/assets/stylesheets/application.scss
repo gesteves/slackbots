@@ -1,42 +1,8 @@
-
-
-.notice {
-  background-color: green;
-  border-radius: 4px;
-  color: white;
-  padding: 10px 20px;
-  margin: 24px 0;
-}
-
-.disclaimer {
-  border-top: 1px solid #eee;
-  color: #999;
-  font-size: 12px;
-  margin: 24px 0;
-  padding-top: 24px;
-}
-
-.container {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.app {
-  border-top: 1px solid #eee;
-  margin: 24px 0;
-  padding: 24px 0;
-}
-
-a:link,
-a:visited,
-a:hover,
-a:active {
-  color: #bf0222;
-}
-
-a:hover,
-a:active {
-  text-decoration: underline;
-}
+@import 'vendors/reset';
+@import 'utils/vars';
+@import 'base/base';
+@import 'blocks/container';
+@import 'blocks/header';
+@import 'blocks/alert';
+@import 'blocks/app';
+@import 'blocks/footer';

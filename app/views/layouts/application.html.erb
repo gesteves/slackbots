@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Slack Apps</title>
+    <title>Slack apps &amp; utilities</title>
     <meta name=viewport content="width=device-width">
     <meta name="description" content="A collection of useful Slack apps.">
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <script src="https://use.typekit.net/<%= ENV['TYPEKIT_ID'] %>.js" onload="try{Typekit.load({async:true});}catch(e){}" async=async></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -20,9 +21,21 @@
   <body>
     <div class="container">
       <% flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, class: name %>
+        <%= content_tag :div, msg, class: "alert alert--#{name}" %>
       <% end -%>
+
       <%= yield %>
+
+      <footer class="footer">
+        <p>
+          None of your Slack team’s private information (such as names, channels, messages, etc.) is accessed or stored in any way.<br/>
+          This app is not affiliated with Slack, Capital Bikeshare, Citibike, forecast.io, Frinkiac, or anyone else, really.<br/>
+          The code is available on <a href="https://github.com/gesteves/slackbots">Github</a>, if you want to check it out.<br/>
+          <a href="https://github.com/twitter/twemoji">Twemoji</a> icons by <a href="https://github.com/twitter">Twitter</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY</a>.<br/>
+          Need help? Feel free to <a href="https://github.com/gesteves/slackbots/issues">open an issue</a>, but I cannot offer much in the way of support for these apps.<br/>
+          Did you enjoy this? <a href="https://twitter.com/gesteves">Let me know</a>!
+        </p>
+      </footer>
     </div>
   </body>
 </html>
