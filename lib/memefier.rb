@@ -25,8 +25,7 @@ class Memefier
       opts = {
         w: 1000,
         mark64: text_url,
-        markalign: 'bottom,center',
-        fm: 'jpg'
+        markalign: 'bottom,center'
       }
       url = Ix.path(original_url).to_url(opts)
       { text: "<#{url}|#{text}>", response_type: 'in_channel' }
