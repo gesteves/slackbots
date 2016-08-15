@@ -18,7 +18,7 @@ class Wmata
       trains.each do |train|
         attachment = { fallback: "#{train['Line']} – #{train['DestinationName']} – #{train['Min']} min", mrkdwn_in: ['text'] }
         attachment[:color] = line_color(train['Line'])
-        fields = [{ value: train['DestinationName'], short: true }]
+        fields = [{ value: "#{train['DestinationName']} (#{pluralize(train['Car'], 'car')})", short: true }]
         fields << { value: arrival_to_human(train['Min']), short: true } unless arrival_to_human(train['Min']).nil?
         attachment[:fields] = fields
         attachments << attachment
