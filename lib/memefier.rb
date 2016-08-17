@@ -17,7 +17,7 @@ class Memefier
         txtclr: 'fff',
         txtlineclr: '000',
         txtsize: text_size(emojify(text)),
-        txtline: 2,
+        txtline: 4,
         txtalign: 'center'
       }
       text_url = Ix.path('~text').to_url(text_opts)
