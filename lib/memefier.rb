@@ -17,7 +17,7 @@ class Memefier
         txtclr: 'fff',
         txtlineclr: '000',
         txtsize: text_size(emojify(text)),
-        txtline: 4,
+        txtline: 2,
         txtalign: 'center'
       }
       text_url = Ix.path('~text').to_url(text_opts)
@@ -53,9 +53,9 @@ class Memefier
     when 0..100
       80
     when 101..200
-      60
+      70
     else
-      40
+      60
     end
   end
 
