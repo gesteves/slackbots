@@ -20,7 +20,6 @@ gem 'dalli'
 
 # Things needed for the Slack apps
 gem 'httparty'
-gem 'forecast_io'
 gem 'text'
 gem 'imgix'
 gem 'gemoji'

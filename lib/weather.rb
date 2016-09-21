@@ -15,8 +15,7 @@ class Weather
       lat = gmaps['results'][0]['geometry']['location']['lat']
       long = gmaps['results'][0]['geometry']['location']['lng']
 
-      ForecastIO.api_key = ENV['FORECAST_API_KEY']
-      forecast = ForecastIO.forecast(lat, long, params: { units: unit_system })
+      forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}").body)
 
       build_response(formatted_address, lat, long, forecast)
     else
@@ -28,40 +27,46 @@ class Weather
 
   def build_response(address, lat, long, forecast)
     attachments = []
-    attachment = { fallback: "Weather forecast for #{address}: http://forecast.io/#/f/#{lat},#{long}", color: color(forecast.currently, forecast.flags.units), title: "Weather forecast for #{address}", title_link: "http://forecast.io/#/f/#{lat},#{long}" }
+    attachment = { fallback: "Weather forecast for #{address}: https://darksky.net/#{lat},#{long}",
+                   color: color(forecast['currently'],
+                   forecast['flags']['units']),
+                   title: "Weather forecast for #{address}",
+                   title_link: "https://darksky.net/#{lat},#{long}",
+                   author_name: 'Powered by Dark Sky',
+                   author_link: 'https://darksky.net/poweredby/' }
     fields = []
 
-    unless forecast.alerts.nil?
-      alerts = forecast.alerts.map { |alert| "<#{alert.uri}|#{alert.title}>" }.join("\n")
+    unless forecast['alerts'].nil?
+      alerts = forecast['alerts'].map { |alert| "<#{alert['uri']}|#{alert['title']}>" }.join("\n")
       fields << { title: 'Alerts ', value: alerts }
     end
 
-    unless forecast.currently.nil?
-      now = forecast.currently
-      if now.temperature.round == now.apparentTemperature.round
-        now_text = "#{now.summary.force_encoding('UTF-8')}, #{now.temperature.round}°, #{(now.humidity * 100).to_i}% humidity, dew point #{now.dewPoint.round}°"
+    unless forecast['currently'].nil?
+      now = forecast['currently']
+      if now['temperature'].round == now['apparentTemperature'].round
+        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}°, #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
       else
-        now_text = "#{now.summary.force_encoding('UTF-8')}, #{now.temperature.round}° (feels like #{now.apparentTemperature.round}°), #{(now.humidity * 100).to_i}% humidity, dew point #{now.dewPoint.round}°"
+        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}° (feels like #{now['apparentTemperature'].round}°), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
       end
       fields << { title: 'Right now', value: now_text }
     end
 
-    unless forecast.minutely.nil?
-      fields << { title: 'Next hour', value: forecast.minutely.summary.force_encoding('UTF-8') }
+    unless forecast['minutely'].nil?
+      fields << { title: 'Next hour', value: forecast['minutely']['summary'].force_encoding('UTF-8') }
     end
 
-    unless forecast.hourly.nil?
-      fields << { title: 'Next 24 hours', value: forecast.hourly.summary.force_encoding('UTF-8') }
+    unless forecast['hourly'].nil?
+      fields << { title: 'Next 24 hours', value: forecast['hourly']['summary'].force_encoding('UTF-8') }
     end
 
-    unless forecast.daily.nil?
-      fields << { title: 'Next 7 days', value: forecast.daily.summary.force_encoding('UTF-8') }
+    unless forecast['daily'].nil?
+      fields << { title: 'Next 7 days', value: forecast['daily']['summary'].force_encoding('UTF-8') }
     end
 
     attachment[:fields] = fields
 
-    if !forecast.currently.nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(forecast.currently.icon)
-      image_path = ActionController::Base.helpers.image_path("weather/#{forecast.currently.icon}.png")
+    if !forecast['currently'].nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(forecast['currently']['icon'])
+      image_path = ActionController::Base.helpers.image_path("weather/#{forecast['currently']['icon']}.png")
       attachment[:thumb_url] = "https://#{ENV['HOST']}#{image_path}"
     end
 
@@ -75,7 +80,7 @@ class Weather
     if currently.nil?
       color = '#CCC'
     else
-      t = units == 'si' ? ((currently.apparentTemperature * (9.0/5.0)) + 32.0).round.to_i : currently.apparentTemperature.round.to_i
+      t = units == 'si' ? ((currently['apparentTemperature'] * (9.0/5.0)) + 32.0).round.to_i : currently['apparentTemperature'].round.to_i
       index = [[0, t].max, colors.size - 1].min
       color = colors[index]
     end
