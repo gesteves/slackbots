@@ -28,8 +28,7 @@ class Weather
   def build_response(address, lat, long, forecast)
     attachments = []
     attachment = { fallback: "Weather forecast for #{address}: https://darksky.net/#{lat},#{long}",
-                   color: color(forecast['currently'],
-                   forecast['flags']['units']),
+                   color: color(forecast['currently'], forecast['flags']['units']),
                    title: "Weather forecast for #{address}",
                    title_link: "https://darksky.net/#{lat},#{long}",
                    author_name: 'Powered by Dark Sky',
