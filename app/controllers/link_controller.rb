@@ -1,7 +1,7 @@
 class LinkController < ApplicationController
   def slash
     if params[:token] == ENV['LINK_VERIFICATION_TOKEN'] || Rails.env.development?
-      response = { text: params.to_s, response_type: 'ephemeral' }
+      response = { text: params.inspect, response_type: 'ephemeral' }
       $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
       render json: response, status: 200
     else
