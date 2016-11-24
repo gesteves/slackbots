@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'link/slash'
-
-  get 'link/auth'
 
   get 'caniuse/slash'
 
