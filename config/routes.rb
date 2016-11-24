@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'link/slash'
+
+  get 'link/auth'
+
   get 'caniuse/slash'
 
   get 'home/index'
@@ -26,6 +30,9 @@ Rails.application.routes.draw do
 
   post 'metro/slash'
   get  'metro/auth', as: 'metro_auth'
+
+  post 'link/slash'
+  get  'link/auth', as: 'link_auth'
 
   post 'memefier/memefy'
   get  'memefier/memefy'
