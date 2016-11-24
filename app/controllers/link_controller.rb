@@ -1,8 +1,17 @@
 class LinkController < ApplicationController
   def slash
     if params[:token] == ENV['LINK_VERIFICATION_TOKEN'] || Rails.env.development?
+      location = if params[:channel_id] =~ /^C/
+        'channel'
+      elsif params[:channel_id] =~ /^G/
+        'private group'
+      elsif params[:channel_id] =~ /^D/
+        'direct message'
+      else
+        'location'
+      end
       url = "slack://channel?team=#{params[:team_id]}&id=#{params[:channel_id]}"
-      response = { text: "Here’s your link! #{url}", response_type: 'ephemeral' }
+      response = { text: "Here’s your link to this #{location}: #{url}", response_type: 'ephemeral' }
       $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
       render json: response, status: 200
     else
