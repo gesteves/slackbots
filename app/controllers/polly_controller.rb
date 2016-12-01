@@ -2,10 +2,10 @@ class PollyController < ApplicationController
   def slash
     if params[:token] == ENV['POLLY_VERIFICATION_TOKEN'] || Rails.env.development?
       query = params[:text].strip
-      if query == '' || query == 'help'
-        response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
+      if query == ''
+        response = { text: "Just type whatever you want and I'll read it back to you.", response_type: 'ephemeral' }
       else
-        response = Polly.new.speak(query)
+        response = Polly.new.speak(params)
       end
       $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
       render json: response, status: 200
