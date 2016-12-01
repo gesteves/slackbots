@@ -1,6 +1,7 @@
 class Polly
   def speak(params)
-    url = generate_mp3_url(params[:text].strip)
+    text = params[:text].strip
+    url = generate_mp3_url(text)
     file = download_file(url)
     s3_url = upload_to_s3(file, params[:team_id], params[:channel_id])
     { text: "<#{s3_url}|#{text}>", response_type: 'in_channel', link_names: 1, unfurl_links: true }
