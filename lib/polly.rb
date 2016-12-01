@@ -7,9 +7,9 @@ class Polly
   end
 
   private
-  def synthesize_speech(text)
-    text = text.gsub(/_(.+)_/, '<emphasis>\1</emphasis>')
-               .gsub(/\*(.+)\*/, '<emphasis level="strong">\1</emphasis>')
+  def synthesize_speech(t)
+    text = t.gsub(/_(.+)_/, '<emphasis>\1</emphasis>')
+            .gsub(/\*(.+)\*/, '<emphasis level="strong">\1</emphasis>')
     ssml = "<speak>#{text}</speak>"
     client = Aws::Polly::Client.new(credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY'], ENV['AWS_SECRET_KEY']), region: 'us-east-1')
     client.synthesize_speech(output_format: 'mp3', text: ssml, text_type: 'ssml', voice_id: ENV['POLLY_VOICE'], lexicon_names: ['lexicon'])
