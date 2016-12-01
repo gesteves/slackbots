@@ -9,7 +9,7 @@ class Polly
   private
   def synthesize_speech(text)
     client = Aws::Polly::Client.new(credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY'], ENV['AWS_SECRET_KEY']), region: 'us-east-1')
-    client.synthesize_speech(output_format: 'mp3', text: text, voice_id: ENV['POLLY_VOICE'])
+    client.synthesize_speech(output_format: 'mp3', text: text, voice_id: ENV['POLLY_VOICE'], lexicon_names: ['lexicon'])
   end
 
   def upload_to_s3(audio_stream, team_id, channel_id)
