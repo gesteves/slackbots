@@ -3,7 +3,7 @@ class Polly
     text = params[:text].strip
     polly = synthesize_speech(text)
     s3_url = upload_to_s3(polly.audio_stream, params[:team_id], params[:channel_id])
-    { text: "<#{s3_url}|#{text}>", response_type: 'in_channel', link_names: 1, unfurl_links: true }
+    { text: "<#{s3_url}|#{text}>", response_type: 'in_channel', link_names: 1, unfurl_links: true, unfurl_media: true }
   end
 
   private
