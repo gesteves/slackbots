@@ -1,5 +1,5 @@
 class Polly
-  def speak(text)
+  def speak(params)
     url = generate_mp3_url(params[:text].strip)
     file = download_file(url)
     s3_url = upload_to_s3(file, params[:team_id], params[:channel_id])
