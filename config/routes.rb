@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  post 'polly/slash'
+  get 'polly/auth', as: 'polly_auth'
+
   get 'caniuse/slash'
 
   get 'home/index'
