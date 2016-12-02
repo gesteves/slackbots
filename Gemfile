@@ -23,7 +23,7 @@ gem 'httparty'
 gem 'text'
 gem 'imgix'
 gem 'gemoji'
-gem 'aws-sdk', '~> 2.6.30'
+gem 'aws-sdk'
 
 # For Heroku
 gem 'figaro'
