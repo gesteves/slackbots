@@ -2,14 +2,18 @@ class MorboController < ApplicationController
 
   def slash
     if params[:token] == ENV['MORBO_VERIFICATION_TOKEN'] || Rails.env.development?
-      query = params[:text].strip
-      if query == '' || query == 'help'
-        response = { text: "Type a quote from Futurama to find it in gif form, like `#{params[:command]} hooray a happy ending for rich people!`", response_type: 'ephemeral' }
-      else
-        frink = Frink.new(site: 'https://morbotron.com', line_width: 24)
-        response = frink.search(query)
+      begin
+        query = params[:text].strip
+        if query == '' || query == 'help'
+          response = { text: "Type a quote from Futurama to find it in gif form, like `#{params[:command]} hooray a happy ending for rich people!`", response_type: 'ephemeral' }
+        else
+          frink = Frink.new(site: 'https://morbotron.com', line_width: 24)
+          response = frink.search(query)
+        end
+        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+      rescue
+        response = { text: "Something went wrong. Dooooooom!", response_type: 'ephemeral' }
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
