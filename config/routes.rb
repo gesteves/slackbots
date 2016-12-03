@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   post 'memefier/palette'
   get  'memefier/auth', as: 'memefier_auth'
 
-  get ':controller/:action'
+  post 'custom/:action', controller: 'custom'
 
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
