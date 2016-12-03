@@ -1,8 +1,8 @@
 class FrinkController < ApplicationController
 
   def slash
-    if params[:token] == ENV['FRINK_VERIFICATION_TOKEN'] || Rails.env.development?
-      begin
+    begin
+      if params[:token] == ENV['FRINK_VERIFICATION_TOKEN'] || Rails.env.development?
         query = params[:text].strip
         if query == '' || query == 'help'
           response = { text: "Type a quote from The Simpsons to find it in gif form, like `#{params[:command]} everything's comin' up Milhouse!`", response_type: 'ephemeral' }
@@ -11,12 +11,13 @@ class FrinkController < ApplicationController
           response = frink.search(query)
         end
         $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
-      rescue
-        response = { text: "Oh, for flavin out loud. Something went wrong.", response_type: 'ephemeral' }
+        render json: response, status: 200
+      else
+        render text: 'Unauthorized', status: 401
       end
+    rescue => e
+      response = { text: "Oh, for flavin out loud, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 

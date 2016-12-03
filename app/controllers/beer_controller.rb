@@ -1,16 +1,21 @@
 class BeerController < ApplicationController
   def slash
-    if params[:token] == ENV['BEER_VERIFICATION_TOKEN'] || Rails.env.development?
-      query = params[:text].strip
-      if query == '' || query == 'help'
-        response = { text: "Search for a beer by brewery and beer name. For example, `#{params[:command]} Firestone Walker Double Jack`", response_type: 'ephemeral' }
+    begin
+      if params[:token] == ENV['BEER_VERIFICATION_TOKEN'] || Rails.env.development?
+        query = params[:text].strip
+        if query == '' || query == 'help'
+          response = { text: "Search for a beer by brewery and beer name. For example, `#{params[:command]} Firestone Walker Double Jack`", response_type: 'ephemeral' }
+        else
+          response = Untappd.new.search(query)
+        end
+        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+        render json: response, status: 200
       else
-        response = Untappd.new.search(query)
+        render text: 'Unauthorized', status: 401
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+    rescue => e
+      response = { text: "Oops, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 

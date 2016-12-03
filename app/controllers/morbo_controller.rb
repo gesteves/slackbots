@@ -1,8 +1,8 @@
 class MorboController < ApplicationController
 
   def slash
-    if params[:token] == ENV['MORBO_VERIFICATION_TOKEN'] || Rails.env.development?
-      begin
+    begin
+      if params[:token] == ENV['MORBO_VERIFICATION_TOKEN'] || Rails.env.development?
         query = params[:text].strip
         if query == '' || query == 'help'
           response = { text: "Type a quote from Futurama to find it in gif form, like `#{params[:command]} hooray a happy ending for rich people!`", response_type: 'ephemeral' }
@@ -11,12 +11,13 @@ class MorboController < ApplicationController
           response = frink.search(query)
         end
         $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
-      rescue
-        response = { text: "Something went wrong. Dooooooom!", response_type: 'ephemeral' }
+        render json: response, status: 200
+      else
+        render text: 'Unauthorized', status: 401
       end
+    rescue => e
+      response = { text: "Dooooooom! Something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 

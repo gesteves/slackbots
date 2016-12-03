@@ -1,17 +1,22 @@
 class CitibikeController < ApplicationController
 
   def slash
-    if params[:token] == ENV['CITIBIKE_VERIFICATION_TOKEN'] || Rails.env.development?
-      query = params[:text].sub(/^\s*(in|for|at)\s+/, '').strip
-      if query == '' || query == 'help'
-        response = { text: "Enter an address to find the closest Citibike dock with bikes. For example, `#{params[:command]} near 350 5th Ave, New York`", response_type: 'ephemeral' }
+    begin
+      if params[:token] == ENV['CITIBIKE_VERIFICATION_TOKEN'] || Rails.env.development?
+        query = params[:text].sub(/^\s*(in|for|at)\s+/, '').strip
+        if query == '' || query == 'help'
+          response = { text: "Enter an address to find the closest Citibike dock with bikes. For example, `#{params[:command]} near 350 5th Ave, New York`", response_type: 'ephemeral' }
+        else
+          response = Citibike.new.search(query)
+        end
+        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+        render json: response, status: 200
       else
-        response = Citibike.new.search(query)
+        render text: 'Unauthorized', status: 401
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+    rescue => e
+      response = { text: "Oops, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 

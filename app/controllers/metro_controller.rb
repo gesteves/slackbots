@@ -1,16 +1,21 @@
 class MetroController < ApplicationController
   def slash
-    if params[:token] == ENV['METRO_VERIFICATION_TOKEN'] || Rails.env.development?
-      query = params[:text].strip
-      if query == '' || query == 'help'
-        response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
+    begin
+      if params[:token] == ENV['METRO_VERIFICATION_TOKEN'] || Rails.env.development?
+        query = params[:text].strip
+        if query == '' || query == 'help'
+          response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
+        else
+          response = Wmata.new.station(query)
+        end
+        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+        render json: response, status: 200
       else
-        response = Wmata.new.station(query)
+        render text: 'Unauthorized', status: 401
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+    rescue => e
+      response = { text: "Oops, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 

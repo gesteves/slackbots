@@ -1,16 +1,21 @@
 class PollyController < ApplicationController
   def slash
-    if params[:token] == ENV['POLLY_VERIFICATION_TOKEN'] || Rails.env.development?
-      query = params[:text].strip
-      if query == ''
-        response = { text: "Just type whatever you want and I'll read it back to you.", response_type: 'ephemeral' }
+    begin
+      if params[:token] == ENV['POLLY_VERIFICATION_TOKEN'] || Rails.env.development?
+        query = params[:text].strip
+        if query == ''
+          response = { text: "Just type whatever you want and I'll read it back to you.", response_type: 'ephemeral' }
+        else
+          response = Polly.new.speak(params)
+        end
+        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+        render json: response, status: 200
       else
-        response = Polly.new.speak(params)
+        render text: 'Unauthorized', status: 401
       end
-      $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+    rescue => e
+      response = { text: "Oops, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    else
-      render text: 'Unauthorized', status: 401
     end
   end
 
