@@ -28,9 +28,9 @@ class Frink
 
   def screencap(query, episode, timestamp)
     response = Rails.cache.fetch("frinkiac:#{@site}:caption:#{episode}:#{timestamp}", expires_in: 24.hours) do
-      HTTParty.get("#{@site}/api/caption?e=#{episode}&t=#{timestamp}")
+      HTTParty.get("#{@site}/api/caption?e=#{episode}&t=#{timestamp}").body
     end
-    body = JSON.parse(response.body)
+    body = JSON.parse(response)
     episode = body['Frame']['Episode']
     timestamp = body['Frame']['Timestamp'].to_i
     subtitle = closest_subtitle(query, body['Subtitles'])
