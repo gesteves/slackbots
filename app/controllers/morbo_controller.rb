@@ -7,7 +7,7 @@ class MorboController < ApplicationController
         if query == '' || query == 'help'
           response = { text: "Type a quote from Futurama to find it in gif form, like `#{params[:command]} hooray a happy ending for rich people!`", response_type: 'ephemeral' }
         else
-          frink = Frink.new(site: 'https://morbotron.com', line_width: 24)
+          frink = Frink.new(site: 'https://morbotron.com', line_width: 20)
           response = frink.search(query)
         end
         $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
