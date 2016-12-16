@@ -9,7 +9,6 @@ class Weather
 
     gmaps_response = GoogleMaps.new.location(location)
     gmaps = JSON.parse(gmaps_response)
-    puts gmaps_response
     response = if gmaps['status'] == 'OK'
       formatted_address = gmaps['results'][0]['formatted_address']
       lat = gmaps['results'][0]['geometry']['location']['lat']
