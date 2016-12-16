@@ -6,7 +6,7 @@ class GoogleMaps
   end
 
   def location(location)
-    Rails.cache.fetch("google_maps:#{parameterize(location)}", expires_in: 30.days) do
+    Rails.cache.fetch("google_maps:v1:#{parameterize(location)}", expires_in: 30.days) do
       HTTParty.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{URI::encode(location)}&key=#{ENV['MAPS_API_KEY']}").body
     end
   end
