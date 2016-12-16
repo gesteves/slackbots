@@ -18,6 +18,7 @@ class Weather
 
       build_response(formatted_address, lat, long, forecast)
     else
+      puts gmaps_response
       { text: 'Sorry, I don’t understand that address.', response_type: 'ephemeral' }
     end
   end
