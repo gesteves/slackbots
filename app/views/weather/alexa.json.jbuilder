@@ -4,7 +4,7 @@ json.array! [1] do |f|
   json.set! 'redirectionUrl', "https://darksky.net/#{@forecast['latitude']},#{@forecast['longitude']}"
   json.set! 'titleText', "Weather forecast for #{@address}"
 
-  text_array = []
+  text_array = ["Here's the forecast for #{@address}."]
 
   unless @forecast['currently'].nil?
     now = @forecast['currently']
