@@ -29,4 +29,12 @@ class WeatherController < ApplicationController
     end
     redirect_to root_url, notice: notice
   end
+
+  def alexa
+    @address = ENV['WEATHER_ADDRESS']
+    @forecast = Weather.new.alexa_search(@address)
+    respond_to do |format|
+      format.json
+    end
+  end
 end

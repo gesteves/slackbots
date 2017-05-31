@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get  'caniuse/auth', as: 'caniuse_auth'
 
   post 'weather/slash'
+  get  'weather/alexa'
   get  'weather/auth', as: 'weather_auth'
 
   post 'citibike/slash'
