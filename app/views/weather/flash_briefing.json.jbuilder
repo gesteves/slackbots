@@ -9,19 +9,23 @@ json.array! [1] do |f|
   unless @forecast['currently'].nil?
     now = @forecast['currently']
     if now['temperature'].round == now['apparentTemperature'].round
-      now_text = "Right now: #{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}°, #{(now['humidity'] * 100).to_i}% humidity, dew point: #{now['dewPoint'].round}°"
+      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}°, #{(now['humidity'] * 100).to_i}% humidity, dew point: #{now['dewPoint'].round}°"
     else
-      now_text = "Right now: #{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}° (feels like #{now['apparentTemperature'].round}°), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
+      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}° (feels like #{now['apparentTemperature'].round}°), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
     end
     text_array << now_text
   end
 
   unless @forecast['minutely'].nil?
-    text_array << "Next hour: #{@forecast['minutely']['summary'].force_encoding('UTF-8')}"
+    text_array << "Next hour: #{@forecast['minutely']['summary']}"
   end
 
   unless @forecast['hourly'].nil?
-    text_array << "Next 24 hours: #{@forecast['hourly']['summary'].force_encoding('UTF-8')}"
+    max = @forecast['hourly']['data'].map { |d| d['apparentTemperature'] }.max
+    min = @forecast['hourly']['data'].map { |d| d['apparentTemperature'] }.min
+    text_array << "Next 24 hours: #{@forecast['hourly']['summary'].gsub(/\.$/, '')}, with a high of #{max.round}° and and low of #{min.round}°."
+
+
   end
 
   json.set! 'mainText', text_array.join("\n\n")
