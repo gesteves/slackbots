@@ -31,6 +31,7 @@ class WeatherController < ApplicationController
   end
 
   def flash_briefing
+    expires_in 5.minutes, public: true
     @address = ENV['WEATHER_ADDRESS']
     @forecast = Weather.new.alexa_search(@address)
     respond_to do |format|

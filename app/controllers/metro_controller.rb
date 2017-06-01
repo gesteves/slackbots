@@ -20,6 +20,7 @@ class MetroController < ApplicationController
   end
 
   def flash_briefing
+    expires_in 30.minutes, public: true
     @alerts = Wmata.new.alerts
     respond_to do |format|
       format.json
