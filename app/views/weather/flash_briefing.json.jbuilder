@@ -24,8 +24,10 @@ json.array! [1] do |f|
     max = @forecast['hourly']['data'].map { |d| d['apparentTemperature'] }.max
     min = @forecast['hourly']['data'].map { |d| d['apparentTemperature'] }.min
     text_array << "Next 24 hours: #{@forecast['hourly']['summary'].gsub(/\.$/, '')}, with a high of #{max.round}° and and low of #{min.round}°."
+  end
 
-
+  unless @forecast['daily'].nil?
+    text_array << "Next 7 days: #{@forecast['daily']['summary']}"
   end
 
   json.set! 'mainText', text_array.join("\n\n")
