@@ -9,6 +9,10 @@ class Wmata
     { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at #{best_match['Name']} Metro Station:" }
   end
 
+  def alerts
+    get_alerts
+  end
+
   private
 
   def build_attachments(stations)
@@ -68,6 +72,13 @@ class Wmata
   def get_station_list
     response = Rails.cache.fetch("wmata:station_list", expires_in: 30.days) do
       HTTParty.get('https://api.wmata.com/Rail.svc/json/jStations', headers: { api_key: ENV['WMATA_API_KEY']}).body
+    end
+    JSON.parse(response)
+  end
+
+  def get_alerts
+    response = Rails.cache.fetch("wmata:alerts", expires_in: 5.minutes) do
+      HTTParty.get('https://api.wmata.com/Incidents.svc/json/Incidents', headers: { api_key: ENV['WMATA_API_KEY']}).body
     end
     JSON.parse(response)
   end

@@ -19,6 +19,13 @@ class MetroController < ApplicationController
     end
   end
 
+  def alexa
+    @alerts = Wmata.new.alerts
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def auth
     if params[:code].present?
       token = get_slack_access_token(params[:code], ENV['METRO_CLIENT_ID'], ENV['METRO_CLIENT_SECRET'], metro_auth_url)
