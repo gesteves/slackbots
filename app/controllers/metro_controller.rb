@@ -19,7 +19,7 @@ class MetroController < ApplicationController
     end
   end
 
-  def alexa
+  def flash_briefing
     @alerts = Wmata.new.alerts
     respond_to do |format|
       format.json
