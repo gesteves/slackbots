@@ -9,9 +9,9 @@ json.array! [1] do |f|
   unless @forecast['currently'].nil?
     now = @forecast['currently']
     if now['temperature'].round == now['apparentTemperature'].round
-      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}°, #{(now['humidity'] * 100).to_i}% humidity, dew point: #{now['dewPoint'].round}°"
+      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}°, with #{(now['humidity'] * 100).to_i}% humidity, and a dew point of #{now['dewPoint'].round}°"
     else
-      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}° (feels like #{now['apparentTemperature'].round}°), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
+      now_text = "Right now: #{now['summary']}, #{now['temperature'].round}°, but it feels like #{now['apparentTemperature'].round}°, with #{(now['humidity'] * 100).to_i}% humidity, and a dew point of #{now['dewPoint'].round}°"
     end
     text_array << now_text
   end
