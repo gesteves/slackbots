@@ -23,22 +23,6 @@ class Weather
     end
   end
 
-  def alexa_search(location)
-    gmaps_response = GoogleMaps.new.location(location)
-    gmaps = JSON.parse(gmaps_response)
-    response = if gmaps['status'] == 'OK'
-      formatted_address = gmaps['results'][0]['formatted_address']
-      lat = gmaps['results'][0]['geometry']['location']['lat']
-      long = gmaps['results'][0]['geometry']['location']['lng']
-      forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}").body)
-      forecast['formattedAddress'] = formatted_address
-      forecast
-    else
-      puts gmaps_response
-      []
-    end
-  end
-
   private
 
   def build_response(address, lat, long, forecast)

@@ -1,7 +1,7 @@
 class AlexaWeatherController < ApplicationController
   def flash
     expires_in 5.minutes, public: true
-    @forecast = Weather.new.alexa_search(params[:city].gsub('-', ' '))
+    @forecast = get_forecast(params[:city].gsub('-', ' '))
     respond_to do |format|
       format.json
     end
@@ -26,7 +26,7 @@ class AlexaWeatherController < ApplicationController
     device_id = params.try(:[], 'context').try(:[], 'System').try(:[], 'device').try(:[], 'deviceId')
     address = params['request']['intent']['slots']['address']['value'] || params['request']['intent']['slots']['city']['value']
     address = get_alexa_address(user_id, device_id) if address.nil? && user_id.present? && device_id.present?
-    @forecast = address.nil? ? nil : Weather.new.alexa_search(address)
+    @forecast = address.nil? ? nil : get_forecast(address)
     respond_to do |format|
       format.json {
         render 'intent_request'
@@ -40,7 +40,7 @@ class AlexaWeatherController < ApplicationController
     consent_token = params.try(:[], 'session').try(:[], 'user').try(:[], 'permissions').try(:[], 'consentToken')
     save_consent_token(user_id, device_id, consent_token)
     address = get_alexa_address(user_id, device_id)
-    @forecast = address.nil? ? nil : Weather.new.alexa_search(address)
+    @forecast = address.nil? ? nil : get_forecast(address)
     respond_to do |format|
       format.json {
         render 'intent_request'
@@ -84,5 +84,20 @@ class AlexaWeatherController < ApplicationController
 
   def save_consent_token(user_id, device_id, consent_token)
     $redis.hmset("alexa:user:#{user_id}:#{device_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
+  end
+
+  def get_forecast(location)
+    gmaps_response = GoogleMaps.new.location(location)
+    gmaps = JSON.parse(gmaps_response)
+    response = if gmaps['status'] == 'OK'
+      formatted_address = gmaps['results'][0]['formatted_address']
+      lat = gmaps['results'][0]['geometry']['location']['lat']
+      long = gmaps['results'][0]['geometry']['location']['lng']
+      forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}").body)
+      forecast['formattedAddress'] = formatted_address
+      forecast
+    else
+      nil
+    end
   end
 end
