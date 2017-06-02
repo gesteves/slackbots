@@ -18,7 +18,7 @@ json.response do
 
         json.type 'Standard'
         json.title "Weather forecast for #{@forecast['formattedAddress']}"
-        json.text forecast_card(@forecast)
+        json.text forecast_plain(@forecast)
         json.set! 'image' do
           json.set! 'smallImageUrl', small_url
           json.set! 'largeImageUrl', big_url
@@ -26,7 +26,7 @@ json.response do
       else
         json.type 'Simple'
         json.title "Weather forecast for #{@forecast['formattedAddress']}"
-        json.content forecast_card(@forecast)
+        json.content forecast_plain(@forecast)
       end
     end
   end
