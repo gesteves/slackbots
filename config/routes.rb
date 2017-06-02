@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   post 'weather/slash'
   get  'weather/flash_briefing'
+  post 'weather/alexa'
   get  'weather/auth', as: 'weather_auth'
 
   post 'citibike/slash'

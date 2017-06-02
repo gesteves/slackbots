@@ -17,6 +17,7 @@ gem 'coffee-rails', '~> 4.2'
 
 # Caching
 gem 'dalli'
+gem 'redis'
 
 # Things needed for the Slack apps
 gem 'httparty'

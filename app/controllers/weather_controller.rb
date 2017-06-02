@@ -38,4 +38,49 @@ class WeatherController < ApplicationController
       format.json
     end
   end
+
+  def alexa
+    expires_now
+    if params['request']['type'] == 'LaunchRequest'
+      save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
+      render :launch_request
+    elsif params['request']['type'] == 'IntentRequest'
+      address = get_alexa_address(params['session']['user']['user_id'])
+      @forecast = Weather.new.alexa_search(address)
+      render :intent_request
+    elsif params['request']['type'] == 'SessionEndedRequest'
+      render :session_ended_request
+    end
+  end
+
+  private
+
+  def get_alexa_address(user_id)
+    user = $redis.hgetall("alexa:user:#{user_id}")
+    if user.present? && user['device_id'].present? && user['consent_token'].present?
+      device_id = user['device_id']
+      consent_token = user['consent_token']
+      response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
+      if response.code == 200
+        body = JSON.parse(response.body)
+        address = []
+        address << body['addressLine1'] unless body['addressLine1'].blank?
+        address << body['addressLine2'] unless body['addressLine2'].blank?
+        address << body['addressLine3'] unless body['addressLine3'].blank?
+        address << body['city'] unless body['city'].blank?
+        address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
+        address << body['countryCode'] unless body['countryCode'].blank?
+        address << body['postalCode'] unless body['postalCode'].blank?
+        address.join(', ')
+      else
+        'Washington, DC'
+      end
+    else
+      'Washington, DC'
+    end
+  end
+
+  def save_consent_token(user_id, device_id, consent_token)
+    $redis.hmset("alexa:user:#{user_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
+  end
 end
