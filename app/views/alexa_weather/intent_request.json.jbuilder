@@ -3,7 +3,7 @@ json.response do
   if @forecast.nil?
     json.set! 'outputSpeech' do
       json.type 'PlainText'
-      json.text "Sorry, I couldn't get your forecast."
+      json.text @message
     end
   else
     json.set! 'outputSpeech' do

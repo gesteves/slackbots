@@ -34,7 +34,11 @@ class AlexaWeatherController < ApplicationController
     consent_token = params['session']['user'].try(:[], 'permissions').try(:[], 'consentToken')
     save_consent_token(user_id, device_id, consent_token)
     address = get_alexa_address(user_id, device_id)
-    @forecast = address.nil? ? nil : get_forecast(address)
+    if address.nil?
+      @message = "To get your forecast, set an address on your Echo and give Nimbus permission to access it. Or, ask Nimbus for the weather in a specific city."
+    else
+      @forecast = get_forecast(address)
+    end
     respond_to do |format|
       format.json {
         render 'intent_request'
@@ -47,7 +51,11 @@ class AlexaWeatherController < ApplicationController
     device_id = params['context']['System'].try(:[], 'device').try(:[], 'deviceId')
     address = params['request']['intent']['slots']['address']['value'] || params['request']['intent']['slots']['city']['value']
     address = get_alexa_address(user_id, device_id) if address.nil? && user_id.present? && device_id.present?
-    @forecast = address.nil? ? nil : get_forecast(address)
+    if address.nil?
+      @message = "To get your forecast, set an address on your Echo and give Nimbus permission to access it. Or, ask Nimbus for the weather in a specific city."
+    else
+      @forecast = get_forecast(address)
+    end
     respond_to do |format|
       format.json {
         render 'intent_request'
