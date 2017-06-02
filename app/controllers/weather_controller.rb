@@ -49,7 +49,11 @@ class WeatherController < ApplicationController
       'intent_request'
     elsif params['request']['type'] == 'IntentRequest'
       address = get_alexa_address(params['session']['user']['userId'], params['context']['System']['device']['deviceId'])
-      @forecast = Weather.new.alexa_search(address)
+      if address.nil?
+        @forecast = nil
+      else
+        @forecast = Weather.new.alexa_search(address)
+      end
       'intent_request'
     elsif params['request']['type'] == 'SessionEndedRequest'
       'session_ended_request'
@@ -82,10 +86,10 @@ class WeatherController < ApplicationController
         address = address.join(', ')
         address
       else
-        'Washington, DC'
+        nil
       end
     else
-      'Washington, DC'
+      nil
     end
   end
 
