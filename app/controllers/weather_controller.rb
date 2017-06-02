@@ -41,6 +41,7 @@ class WeatherController < ApplicationController
 
   def alexa
     expires_now
+    logger.info "Received #{params['request']['type']}"
     view = if params['request']['type'] == 'LaunchRequest'
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
       'launch_request'
