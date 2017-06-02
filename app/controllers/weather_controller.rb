@@ -1,5 +1,4 @@
 class WeatherController < ApplicationController
-
   def slash
     begin
       if params[:token] == ENV['WEATHER_VERIFICATION_TOKEN'] || Rails.env.development?
@@ -28,72 +27,5 @@ class WeatherController < ApplicationController
       notice = 'Authentication failed. Try again!'
     end
     redirect_to root_url, notice: notice
-  end
-
-  def flash_briefing
-    expires_in 5.minutes, public: true
-    @address = ENV['WEATHER_ADDRESS']
-    @forecast = Weather.new.alexa_search(@address)
-    respond_to do |format|
-      format.json
-    end
-  end
-
-  def alexa
-    expires_now
-    logger.info "#{params['request']['type']} received."
-    view = if params['request']['type'] == 'LaunchRequest'
-      save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
-      address = get_alexa_address(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'])
-      @forecast = Weather.new.alexa_search(address)
-      'intent_request'
-    elsif params['request']['type'] == 'IntentRequest'
-      address = get_alexa_address(params['session']['user']['userId'], params['context']['System']['device']['deviceId'])
-      if address.nil?
-        @forecast = nil
-      else
-        @forecast = Weather.new.alexa_search(address)
-      end
-      'intent_request'
-    elsif params['request']['type'] == 'SessionEndedRequest'
-      'session_ended_request'
-    end
-    respond_to do |format|
-      format.json {
-        render view
-      }
-    end
-  end
-
-  private
-
-  def get_alexa_address(user_id, device_id)
-    user = $redis.hgetall("alexa:user:#{user_id}:#{device_id}")
-    if user.present? && user['device_id'].present? && user['consent_token'].present?
-      device_id = user['device_id']
-      consent_token = user['consent_token']
-      response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
-      if response.code == 200
-        body = JSON.parse(response.body)
-        address = []
-        address << body['addressLine1'] unless body['addressLine1'].blank?
-        address << body['addressLine2'] unless body['addressLine2'].blank?
-        address << body['addressLine3'] unless body['addressLine3'].blank?
-        address << body['city'] unless body['city'].blank?
-        address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
-        address << body['countryCode'] unless body['countryCode'].blank?
-        address << body['postalCode'] unless body['postalCode'].blank?
-        address = address.join(', ')
-        address
-      else
-        nil
-      end
-    else
-      nil
-    end
-  end
-
-  def save_consent_token(user_id, device_id, consent_token)
-    $redis.hmset("alexa:user:#{user_id}:#{device_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
   end
 end

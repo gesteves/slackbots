@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  post 'alexa/weather(.:format)'                      => 'alexa_weather#index', defaults: { format: 'json' }
+  get  'alexa/weather/flash_briefing/:city(.:format)' => 'alexa_weather#flash', defaults: { format: 'json' }
+
   post 'polly/slash'
   get 'polly/auth', as: 'polly_auth'
 
@@ -17,8 +20,6 @@ Rails.application.routes.draw do
   get  'caniuse/auth', as: 'caniuse_auth'
 
   post 'weather/slash'
-  get  'weather/flash_briefing'
-  post 'weather/alexa(.:format)', defaults: { format: 'json' }
   get  'weather/auth', as: 'weather_auth'
 
   post 'citibike/slash'
