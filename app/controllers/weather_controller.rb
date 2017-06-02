@@ -44,12 +44,16 @@ class WeatherController < ApplicationController
     logger.info "#{params['request']['type']} received."
     view = if params['request']['type'] == 'LaunchRequest'
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
-      address = get_alexa_address(params['context']['System']['user']['userId'])
+      address = get_postal_code(params['context']['System']['user']['userId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'IntentRequest'
-      address = get_alexa_address(params['session']['user']['user_id'])
-      @forecast = Weather.new.alexa_search(address)
+      address = get_postal_code(params['session']['user']['user_id'])
+      if address.blank?
+        @forecast = nil
+      else
+        @forecast = Weather.new.alexa_search(address)
+      end
       'intent_request'
     elsif params['request']['type'] == 'SessionEndedRequest'
       'session_ended_request'
@@ -63,33 +67,20 @@ class WeatherController < ApplicationController
 
   private
 
-  def get_alexa_address(user_id)
+  def get_postal_code(user_id)
     user = $redis.hgetall("alexa:user:#{user_id}")
     if user.present? && user['device_id'].present? && user['consent_token'].present?
-      logger.info "User found, requesting address."
       device_id = user['device_id']
       consent_token = user['consent_token']
-      response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
+      response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address/countryAndPostalCode", headers: { 'Authorization': "Bearer #{consent_token}"})
       if response.code == 200
         body = JSON.parse(response.body)
-        address = []
-        address << body['addressLine1'] unless body['addressLine1'].blank?
-        address << body['addressLine2'] unless body['addressLine2'].blank?
-        address << body['addressLine3'] unless body['addressLine3'].blank?
-        address << body['city'] unless body['city'].blank?
-        address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
-        address << body['countryCode'] unless body['countryCode'].blank?
-        address << body['postalCode'] unless body['postalCode'].blank?
-        address = address.join(', ')
-        logger.info "Address found: #{address}"
-        address
+        body['postalCode']
       else
-        logger.info "Address not found, status #{response.code}, response: #{response.body}"
-        'Washington, DC'
+        '20003'
       end
     else
-      logger.info "User not found!"
-      'Washington, DC'
+      '20003'
     end
   end
 
