@@ -17,7 +17,7 @@ json.response do
         small_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 720)
 
         json.type 'Standard'
-        json.title "Weather forecast for #{@forecast['formattedAddress']}"
+        json.title "Weather Forecast"
         json.text forecast_plain(@forecast)
         json.set! 'image' do
           json.set! 'smallImageUrl', small_url
@@ -25,7 +25,7 @@ json.response do
         end
       else
         json.type 'Simple'
-        json.title "Weather forecast for #{@forecast['formattedAddress']}"
+        json.title "Weather Forecast"
         json.content forecast_plain(@forecast)
       end
     end
