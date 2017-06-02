@@ -31,11 +31,7 @@ class Weather
       lat = gmaps['results'][0]['geometry']['location']['lat']
       long = gmaps['results'][0]['geometry']['location']['lng']
       forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}").body)
-      address_components = []
-      address_components << gmaps['results'][0]['address_components'].select { |ac| ac['types'].include? 'locality' }.try(:first).try(:[], 'long_name')
-      address_components << gmaps['results'][0]['address_components'].select { |ac| ac['types'].include? 'administrative_area_level_1' }.try(:first).try(:[], 'long_name')
-      address_components << gmaps['results'][0]['address_components'].select { |ac| ac['types'].include? 'country' }.try(:first).try(:[], 'long_name')
-      forecast['address'] =  address_components.join(', ')
+      forecast['formattedAddress'] = formatted_address
       forecast
     else
       puts gmaps_response
