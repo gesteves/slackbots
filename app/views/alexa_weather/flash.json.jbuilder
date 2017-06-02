@@ -2,9 +2,9 @@ json.array! [1] do |f|
   json.set! 'updateDate', Time.at(@forecast['currently']['time']).strftime('%Y-%m-%dT%H:%M:%S.%z')
   json.set! 'uid', @forecast['currently']['time'].to_s
   json.set! 'redirectionUrl', "https://darksky.net/#{@forecast['latitude']},#{@forecast['longitude']}"
-  json.set! 'titleText', "Weather forecast for #{@address}"
+  json.set! 'titleText', "Weather forecast for #{@forecast['formattedAddress']}"
 
-  text_array = ["Here's the forecast for #{@address}."]
+  text_array = ["Here's the forecast for #{@forecast['formattedAddress']}."]
 
   unless @forecast['currently'].nil?
     now = @forecast['currently']

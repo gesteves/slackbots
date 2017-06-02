@@ -1,8 +1,7 @@
 class AlexaWeatherController < ApplicationController
   def flash
     expires_in 5.minutes, public: true
-    @address = ENV['WEATHER_ADDRESS']
-    @forecast = Weather.new.alexa_search(@address)
+    @forecast = Weather.new.alexa_search(params[:city].gsub('-', ' '))
     respond_to do |format|
       format.json
     end
