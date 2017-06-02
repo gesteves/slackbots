@@ -41,7 +41,6 @@ class WeatherController < ApplicationController
 
   def alexa
     expires_now
-    logger.info "Received #{params['request']['type']}"
     view = if params['request']['type'] == 'LaunchRequest'
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
       address = get_alexa_address(params['context']['System']['user']['userId'])
@@ -68,7 +67,6 @@ class WeatherController < ApplicationController
     if user.present? && user['device_id'].present? && user['consent_token'].present?
       device_id = user['device_id']
       consent_token = user['consent_token']
-      logger.info "Fetching user #{user_id} & device #{device_id}"
       response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
       if response.code == 200
         body = JSON.parse(response.body)
@@ -80,9 +78,7 @@ class WeatherController < ApplicationController
         address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
         address << body['countryCode'] unless body['countryCode'].blank?
         address << body['postalCode'] unless body['postalCode'].blank?
-        address = address.join(', ')
-        logger.info "Address is #{address}"
-        address
+        address.join(', ')
       else
         'Washington, DC'
       end
@@ -92,7 +88,6 @@ class WeatherController < ApplicationController
   end
 
   def save_consent_token(user_id, device_id, consent_token)
-    logger.info "Saving user #{user_id} & device #{device_id}"
     $redis.hmset("alexa:user:#{user_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
   end
 end
