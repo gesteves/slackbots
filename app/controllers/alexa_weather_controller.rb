@@ -80,15 +80,14 @@ class AlexaWeatherController < ApplicationController
       if response.code == 200
         body = JSON.parse(response.body)
         address = []
-        address << body['addressLine1'] unless body['addressLine1'].blank?
-        address << body['addressLine2'] unless body['addressLine2'].blank?
-        address << body['addressLine3'] unless body['addressLine3'].blank?
-        address << body['city'] unless body['city'].blank?
-        address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
-        address << body['countryCode'] unless body['countryCode'].blank?
-        address << body['postalCode'] unless body['postalCode'].blank?
-        address = address.join(', ')
-        address
+        address << body['addressLine1']
+        address << body['addressLine2']
+        address << body['addressLine3']
+        address << body['city']
+        address << body['stateOrRegion']
+        address << body['countryCode']
+        address << body['postalCode']
+        address.reject { |a| a.blank? }.join(', ')
       else
         nil
       end
