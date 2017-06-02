@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   post 'weather/slash'
   get  'weather/flash_briefing'
-  post 'weather/alexa'
+  post 'weather/alexa(.:format)', defaults: { format: 'json' }
   get  'weather/auth', as: 'weather_auth'
 
   post 'citibike/slash'

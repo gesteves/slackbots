@@ -41,15 +41,20 @@ class WeatherController < ApplicationController
 
   def alexa
     expires_now
-    if params['request']['type'] == 'LaunchRequest'
+    view = if params['request']['type'] == 'LaunchRequest'
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
-      render :launch_request
+      'launch_request'
     elsif params['request']['type'] == 'IntentRequest'
       address = get_alexa_address(params['session']['user']['user_id'])
       @forecast = Weather.new.alexa_search(address)
-      render :intent_request
+      'intent_request'
     elsif params['request']['type'] == 'SessionEndedRequest'
-      render :session_ended_request
+      'session_ended_request'
+    end
+    respond_to do |format|
+      format.json {
+        render view
+      }
     end
   end
 
