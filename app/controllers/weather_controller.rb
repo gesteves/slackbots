@@ -43,11 +43,15 @@ class WeatherController < ApplicationController
     expires_now
     logger.info "#{params['request']['type']} received."
     view = if params['request']['type'] == 'LaunchRequest'
+      logger.info "User: " + params['context']['System']['user']['userId']
+      logger.info "Device:" + params['context']['System']['device']['deviceId']
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
       address = get_alexa_address(params['context']['System']['user']['userId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'IntentRequest'
+      logger.info "User: " + params['context']['System']['user']['userId']
+      logger.info "Device:" + params['context']['System']['device']['deviceId']
       address = get_alexa_address(params['session']['user']['userId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
