@@ -28,11 +28,12 @@ class AlexaWeatherController < ApplicationController
 
   private
 
-  def intent_request(params)
+  def launch_request(params)
     user_id = params['session']['user']['userId']
     device_id = params['context']['System'].try(:[], 'device').try(:[], 'deviceId')
-    address = params['request']['intent']['slots']['address']['value'] || params['request']['intent']['slots']['city']['value']
-    address = get_alexa_address(user_id, device_id) if address.nil? && user_id.present? && device_id.present?
+    consent_token = params['session']['user'].try(:[], 'permissions').try(:[], 'consentToken')
+    save_consent_token(user_id, device_id, consent_token)
+    address = get_alexa_address(user_id, device_id)
     @forecast = address.nil? ? nil : get_forecast(address)
     respond_to do |format|
       format.json {
@@ -41,12 +42,11 @@ class AlexaWeatherController < ApplicationController
     end
   end
 
-  def launch_request(params)
+  def intent_request(params)
     user_id = params['session']['user']['userId']
     device_id = params['context']['System'].try(:[], 'device').try(:[], 'deviceId')
-    consent_token = params['session']['user'].try(:[], 'permissions').try(:[], 'consentToken')
-    save_consent_token(user_id, device_id, consent_token)
-    address = get_alexa_address(user_id, device_id)
+    address = params['request']['intent']['slots']['address']['value'] || params['request']['intent']['slots']['city']['value']
+    address = get_alexa_address(user_id, device_id) if address.nil? && user_id.present? && device_id.present?
     @forecast = address.nil? ? nil : get_forecast(address)
     respond_to do |format|
       format.json {
