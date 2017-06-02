@@ -43,16 +43,12 @@ class WeatherController < ApplicationController
     expires_now
     logger.info "#{params['request']['type']} received."
     view = if params['request']['type'] == 'LaunchRequest'
-      logger.info "User: " + params['context']['System']['user']['userId']
-      logger.info "Device:" + params['context']['System']['device']['deviceId']
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
-      address = get_alexa_address(params['context']['System']['user']['userId'])
+      address = get_alexa_address(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'IntentRequest'
-      logger.info "User: " + params['context']['System']['user']['userId']
-      logger.info "Device:" + params['context']['System']['device']['deviceId']
-      address = get_alexa_address(params['session']['user']['userId'])
+      address = get_alexa_address(params['session']['user']['userId'], params['context']['System']['device']['deviceId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'SessionEndedRequest'
@@ -67,10 +63,9 @@ class WeatherController < ApplicationController
 
   private
 
-  def get_alexa_address(user_id)
-    user = $redis.hgetall("alexa:user:#{user_id}")
+  def get_alexa_address(user_id, device_id)
+    user = $redis.hgetall("alexa:user:#{user_id}:#{device_id}")
     if user.present? && user['device_id'].present? && user['consent_token'].present?
-      logger.info "User found, requesting address."
       device_id = user['device_id']
       consent_token = user['consent_token']
       response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
@@ -85,19 +80,16 @@ class WeatherController < ApplicationController
         address << body['countryCode'] unless body['countryCode'].blank?
         address << body['postalCode'] unless body['postalCode'].blank?
         address = address.join(', ')
-        logger.info "Address found: #{address}"
         address
       else
-        logger.info "Address not found, status #{response.code}, response: #{response.body}"
         'Washington, DC'
       end
     else
-      logger.info "User not found!"
       'Washington, DC'
     end
   end
 
   def save_consent_token(user_id, device_id, consent_token)
-    $redis.hmset("alexa:user:#{user_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
+    $redis.hmset("alexa:user:#{user_id}:#{device_id}", 'user_id', user_id, 'device_id', device_id, 'consent_token', consent_token)
   end
 end
