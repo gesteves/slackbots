@@ -65,6 +65,7 @@ class WeatherController < ApplicationController
   def get_alexa_address(user_id)
     user = $redis.hgetall("alexa:user:#{user_id}")
     if user.present? && user['device_id'].present? && user['consent_token'].present?
+      logger.info "User found, requesting address."
       device_id = user['device_id']
       consent_token = user['consent_token']
       response = HTTParty.get("https://api.amazonalexa.com/v1/devices/#{device_id}/settings/address", headers: { 'Authorization': "Bearer #{consent_token}"})
@@ -78,11 +79,15 @@ class WeatherController < ApplicationController
         address << body['stateOrRegion'] unless body['stateOrRegion'].blank?
         address << body['countryCode'] unless body['countryCode'].blank?
         address << body['postalCode'] unless body['postalCode'].blank?
-        address.join(', ')
+        address = address.join(', ')
+        logger.info "Address found: #{address}"
+        address
       else
+        logger.info "Address not found, status #{response.code}, response: #{response.body}"
         'Washington, DC'
       end
     else
+      logger.info "User not found!"
       'Washington, DC'
     end
   end
