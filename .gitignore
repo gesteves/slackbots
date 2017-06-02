@@ -24,3 +24,5 @@
 /config/application.yml
 
 *.rdb
+
+.DS_Store

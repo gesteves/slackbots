@@ -66,7 +66,8 @@ class Weather
 
     if !forecast['currently'].nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(forecast['currently']['icon'])
       image_path = ActionController::Base.helpers.image_path("weather/#{forecast['currently']['icon']}.png")
-      attachment[:thumb_url] = "https://#{ENV['HOST']}#{image_path}"
+      url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 75)
+      attachment[:thumb_url] = url
     end
 
     attachments << attachment

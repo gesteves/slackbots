@@ -11,9 +11,23 @@ json.response do
       json.ssml forecast_ssml(@forecast)
     end
     json.set! 'card' do
-      json.type 'Simple'
-      json.title "Weather forecast for #{@forecast['formattedAddress']}"
-      json.content forecast_card(@forecast)
+      if !@forecast['currently'].nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(@forecast['currently']['icon'])
+        image_path = ActionController::Base.helpers.image_path("weather/#{forecast['currently']['icon']}.png")
+        big_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 1200)
+        small_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 720)
+
+        json.type 'Standard'
+        json.title "Weather forecast for #{@forecast['formattedAddress']}"
+        json.text forecast_card(@forecast)
+        json.set! 'image' do
+          json.set! 'smallImageUrl', small_url
+          json.set! 'largeImageUrl', big_url
+        end
+      else
+        json.type 'Simple'
+        json.title "Weather forecast for #{@forecast['formattedAddress']}"
+        json.content forecast_card(@forecast)
+      end
     end
   end
 end
