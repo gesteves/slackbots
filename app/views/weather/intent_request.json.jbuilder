@@ -1,9 +1,9 @@
 json.version '1.0'
 json.response do
   json.set! 'outputSpeech' do
-    json.type 'PlainText'
+    json.type 'SSML'
 
-    text_array = ["Here's the forecast for #{@forecast['formattedAddress']}."]
+    text_array = ["Here's the forecast for <say-as interpret-as="address">#{@forecast['formattedAddress']}</say-as>."]
 
     unless @forecast['currently'].nil?
       now = @forecast['currently']
@@ -29,6 +29,6 @@ json.response do
       text_array << "Next 7 days: #{@forecast['daily']['summary']}"
     end
 
-    json.text text_array.join("\n\n")
+    json.ssml "<speak>#{text_array.join("\n\n")}</speak>"
   end
 end
