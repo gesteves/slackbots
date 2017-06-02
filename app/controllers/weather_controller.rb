@@ -48,7 +48,7 @@ class WeatherController < ApplicationController
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'IntentRequest'
-      address = get_alexa_address(params['session']['user']['user_id'])
+      address = get_alexa_address(params['session']['user']['userId'])
       @forecast = Weather.new.alexa_search(address)
       'intent_request'
     elsif params['request']['type'] == 'SessionEndedRequest'
