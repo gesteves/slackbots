@@ -3,7 +3,7 @@ json.response do
   json.set! 'outputSpeech' do
     json.type 'SSML'
 
-    text_array = ["Here's the forecast for <say-as interpret-as="address">#{@forecast['formattedAddress']}</say-as>."]
+    text_array = ["Here's the forecast for <say-as interpret-as=\"address\">#{@forecast['formattedAddress']}</say-as>."]
 
     unless @forecast['currently'].nil?
       now = @forecast['currently']
