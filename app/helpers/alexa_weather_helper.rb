@@ -1,6 +1,6 @@
 module AlexaWeatherHelper
   def forecast_ssml(forecast)
-    text_array = ["Here's the forecast for <say-as interpret-as=\"address\">#{forecast['formattedAddress']}</say-as>, powered by Dark Sky."]
+    text_array = ["Here's the forecast for <say-as interpret-as=\"address\">#{forecast['formattedAddress']}</say-as>"]
 
     unless forecast['currently'].nil?
       now = forecast['currently']
@@ -30,7 +30,7 @@ module AlexaWeatherHelper
   end
 
   def forecast_plain(forecast)
-    text_array = ["Here's the forecast for #{forecast['formattedAddress']}, powered by Dark Sky."]
+    text_array = ["Here's the forecast for #{forecast['formattedAddress']}"]
 
     unless forecast['currently'].nil?
       now = forecast['currently']
