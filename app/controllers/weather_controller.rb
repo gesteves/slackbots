@@ -41,6 +41,7 @@ class WeatherController < ApplicationController
 
   def alexa
     expires_now
+    logger.info "#{params['request']['type']} received."
     view = if params['request']['type'] == 'LaunchRequest'
       save_consent_token(params['context']['System']['user']['userId'], params['context']['System']['device']['deviceId'], params['context']['System']['user']['permissions']['consentToken'])
       address = get_alexa_address(params['context']['System']['user']['userId'])
