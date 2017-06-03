@@ -1,11 +1,4 @@
 class AlexaWeatherController < ApplicationController
-  def flash
-    expires_in 5.minutes, public: true
-    @forecast = get_forecast(params[:city].gsub('-', ' '))
-    respond_to do |format|
-      format.json
-    end
-  end
 
   def index
     request_time = Time.parse(params['request']['timestamp'])
