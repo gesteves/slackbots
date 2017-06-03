@@ -1,31 +1,36 @@
 class AlexaWeatherController < ApplicationController
+  before_action :verify_request_validity
 
+  # All request from Alexa go through here.
+  # Handle each type of request separately.
   def index
-    request_time = Time.parse(params['request']['timestamp'])
-    application_id = params['session']['application']['applicationId']
-
-    # Check that the request is valid:
-    # was sent less than 150 seconds ago, and the app id matches
-    # TODO: Check the signature https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service#checking-the-signature-of-the-request
-    if (Time.now - request_time > 150 || application_id != ENV['ALEXA_WEATHER_APP_ID'])
-      render plain: 'Bad Request', status: 400
-    else
-      # Handle each type of request.
-      case params['request']['type']
-      when 'LaunchRequest'
-        launch_request(params)
-      when 'IntentRequest'
-        intent_request(params)
-      when 'SessionEndedRequest'
-        session_ended_request(params)
-      end
+    case params['request']['type']
+    when 'LaunchRequest'
+      launch_request(params)
+    when 'IntentRequest'
+      intent_request(params)
+    when 'SessionEndedRequest'
+      session_ended_request(params)
     end
   end
 
   private
 
+  # Check that the request is valid. It's valid if:
+  # * It was sent less than 150 seconds ago
+  # * The app ID is the correct one
+  # * The signature is valid.
+  # TODO: check signature validity https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service#checking-the-signature-of-the-request
+  def verify_request_validity
+    request_time = Time.parse(params['request']['timestamp'])
+    application_id = params['session']['application']['applicationId']
+    if (Time.now - request_time > 150 || application_id != ENV['ALEXA_WEATHER_APP_ID'])
+      render plain: 'Bad Request', status: 400
+    end
+  end
+
   # Launch request, i.e. "Alexa, open Dark Sky"
-  # Store the consent token from the request so I can use it later to access
+  # Store the consent token from the request so it can be used later to access
   # the Echo's address.
   def launch_request(params)
     user_id = params['session']['user']['userId']
