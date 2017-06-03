@@ -41,18 +41,26 @@ class AlexaWeatherController < ApplicationController
   end
 
   def intent_request(params)
+    case params['request']['intent']['name']
+    when 'DarkSkyForecast'
+      forecast_intent(params)
+    end
+  end
+
+  def forecast_intent(params)
     user_id = params['session']['user']['userId']
-    device_id = params['context']['System'].try(:[], 'device').try(:[], 'deviceId')
+    device_id = params['context'].try(:[], 'System').try(:[], 'device').try(:[], 'deviceId')
     address = params['request']['intent']['slots']['address']['value'] || params['request']['intent']['slots']['city']['value']
     address = get_alexa_address(user_id, device_id) if address.nil? && user_id.present? && device_id.present?
     if address.nil?
-      @message = "To get your forecast, set an address on your Echo and give Nimbus permission to access it. Or, ask Nimbus for the weather in a specific city."
+      @message = "To get your forecast, set an address on your Echo and give Dark Sky permission to access it. Or, ask Dark Sky for the weather in a specific city."
     else
       @forecast = get_forecast(address)
+      @message = "Couldn\'t get the forecast for that location." if @forecast.nil?
     end
     respond_to do |format|
       format.json {
-        render 'intent_request'
+        render 'forecast_intent'
       }
     end
   end

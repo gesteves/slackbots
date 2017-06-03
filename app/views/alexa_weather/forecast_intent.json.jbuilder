@@ -12,7 +12,7 @@ json.response do
     end
     json.set! 'card' do
       if !@forecast['currently'].nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(@forecast['currently']['icon'])
-        image_path = ActionController::Base.helpers.image_path("weather/#{@forecast['currently']['icon']}.png")
+        image_path = image_url("weather/#{@forecast['currently']['icon']}.png")
         big_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 1200)
         small_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 720)
 
