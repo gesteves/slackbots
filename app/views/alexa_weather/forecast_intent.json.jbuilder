@@ -12,9 +12,9 @@ json.response do
     end
     json.set! 'card' do
       if !@forecast['currently'].nil? && ['clear-day', 'clear-night', 'rain', 'snow', 'wind', 'fog', 'cloudy', 'partly-cloudy-day', 'partly-cloudy-night'].include?(@forecast['currently']['icon'])
-        image_path = image_url("weather/#{@forecast['currently']['icon']}.png")
-        big_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 1200)
-        small_url = Ix.path("https://#{ENV['HOST']}#{image_path}").to_url(w: 720)
+        base_url = image_url("weather/#{@forecast['currently']['icon']}.png")
+        big_url = Ix.path(base_url).to_url(w: 1200)
+        small_url = Ix.path(base_url).to_url(w: 720)
 
         json.type 'Standard'
         json.title "Weather Forecast"
