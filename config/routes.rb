@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  post 'alexa/weather(.:format)' => 'alexa_weather#index', defaults: { format: 'json' }
-
   post 'polly/slash'
   get 'polly/auth', as: 'polly_auth'
 
