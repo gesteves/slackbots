@@ -55,7 +55,7 @@ class Weather
     end
 
     unless forecast['hourly'].nil?
-      apparentTemperatures = forecast['hourly']['data'].slice[0, 24].map { |d| d['apparentTemperature']}
+      apparentTemperatures = forecast['hourly']['data'].slice(0, 24).map { |d| d['apparentTemperature']}
       high = apparentTemperatures.max.round
       low = apparentTemperatures.min.round
       fields << { title: 'Next 24 hours', value: "#{forecast['hourly']['summary'].force_encoding('UTF-8')}, with a high of #{high}° and a low of #{low}°." }
