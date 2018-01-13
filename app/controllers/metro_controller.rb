@@ -5,6 +5,8 @@ class MetroController < ApplicationController
         query = params[:text].strip
         if query == '' || query == 'help'
           response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
+        elsif query == 'random'
+          response = Wmata.new.random
         else
           response = Wmata.new.station(query)
         end

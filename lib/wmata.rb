@@ -9,6 +9,13 @@ class Wmata
     { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at #{best_match['Name']} Metro Station:" }
   end
 
+  def random
+    station_list = get_station_list
+    random_station = station_list['Stations'].sample
+    stations = station_list['Stations'].select { |s| s['Name'] == random_station['Name'] }
+    { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at #{random_station['Name']} Metro Station:" }
+  end
+
   def alerts
     get_alerts
   end
