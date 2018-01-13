@@ -21,7 +21,17 @@ class Wmata
   end
 
   def alerts
-    get_alerts
+    alerts = get_alerts
+    if alerts['Incidents'].empty?
+      { response_type: 'in_channel', text: "There are no Metro rails service alerts at this time. Hooray!" }
+    else
+      text = if alerts['Incidents'].size == 1
+        "There is 1 Metro rails service alert at this time:"
+      else
+        "There are #{alerts['Incidents'].size} Metro rails service alerts at this time:"
+      end
+      { response_type: 'in_channel', attachments: build_alert_attachments(alerts['Incidents']), text: text }
+    end
   end
 
   private
@@ -38,6 +48,17 @@ class Wmata
         attachment[:fields] = fields
         attachments << attachment
       end
+    end
+    attachments
+  end
+
+  def build_alert_attachments(incidents)
+    attachments = []
+    incidents.each do |incident|
+      attachment = { fallback: incident['Description'],
+                     text: incident['Description'],
+                     color: line_color(incident['LinesAffected'].split(/;[\s]?/).first) }
+      attachments << attachment
     end
     attachments
   end

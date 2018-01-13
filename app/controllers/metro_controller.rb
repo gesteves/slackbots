@@ -7,6 +7,8 @@ class MetroController < ApplicationController
           response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
         elsif query == 'random'
           response = Wmata.new.random
+        elsif query == 'alerts'
+          response = Wmata.new.alerts
         else
           response = Wmata.new.station(query)
         end
@@ -18,14 +20,6 @@ class MetroController < ApplicationController
     rescue => e
       response = { text: "Oops, something went wrong: `#{e}`", response_type: 'ephemeral' }
       render json: response, status: 200
-    end
-  end
-
-  def flash_briefing
-    expires_in 30.minutes, public: true
-    @alerts = Wmata.new.alerts
-    respond_to do |format|
-      format.json
     end
   end
 
