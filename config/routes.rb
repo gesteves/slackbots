@@ -29,7 +29,6 @@ Rails.application.routes.draw do
   get  'beer/auth', as: 'beer_auth'
 
   post 'metro/slash'
-  get  'metro/flash_briefing'
   get  'metro/auth', as: 'metro_auth'
 
   post 'link/slash'
