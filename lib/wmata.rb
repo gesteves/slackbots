@@ -23,13 +23,9 @@ class Wmata
   def alerts
     alerts = get_alerts
     if alerts['Incidents'].empty?
-      { response_type: 'in_channel', text: "There are no Metro rails service alerts at this time. Hooray!" }
+      { response_type: 'in_channel', text: "There are no service alerts at this time. Hooray!" }
     else
-      text = if alerts['Incidents'].size == 1
-        "There is 1 Metro rails service alert at this time:"
-      else
-        "There are #{alerts['Incidents'].size} Metro rails service alerts at this time:"
-      end
+      text =  "There #{alerts['Incidents'].size == 1 ? 'is' : 'are'} #{pluralize(alerts['Incidents'].size, 'service alert')} at this time:"
       { response_type: 'in_channel', attachments: build_alert_attachments(alerts['Incidents']), text: text }
     end
   end
