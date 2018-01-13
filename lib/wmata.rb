@@ -6,14 +6,18 @@ class Wmata
     white = Text::WhiteSimilarity.new
     best_match = station_list['Stations'].sort { |a, b| white.similarity(b['Name'], search) <=>  white.similarity(a['Name'], search) }.first
     stations = station_list['Stations'].select { |s| s['Name'] == best_match['Name'] }
-    { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at #{best_match['Name']} Metro Station:" }
+    name = "#{best_match['Name']} Metro Station"
+    url = maps_url(name)
+    { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at <#{url}|#{name}>:" }
   end
 
   def random
     station_list = get_station_list
     random_station = station_list['Stations'].sample
     stations = station_list['Stations'].select { |s| s['Name'] == random_station['Name'] }
-    { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at #{random_station['Name']} Metro Station:" }
+    name = "#{random_station['Name']} Metro Station"
+    url = maps_url(name)
+    { response_type: 'in_channel', attachments: build_attachments(stations), text: "Next train arrivals at <#{url}|#{name}>:" }
   end
 
   def alerts
@@ -88,5 +92,9 @@ class Wmata
       HTTParty.get('https://api.wmata.com/Incidents.svc/json/Incidents', headers: { api_key: ENV['WMATA_API_KEY']}).body
     end
     JSON.parse(response)
+  end
+
+  def maps_url(query)
+    "https://www.google.com/maps/search/#{CGI.escape(query)}"
   end
 end
