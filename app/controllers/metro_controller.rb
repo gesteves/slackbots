@@ -4,10 +4,10 @@ class MetroController < ApplicationController
       if params[:token] == ENV['METRO_VERIFICATION_TOKEN'] || Rails.env.development?
         query = params[:text].strip
         if query == '' || query == 'help'
-          response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`", response_type: 'ephemeral' }
+          response = { text: "Search for a Metro station by name to see status of trains at that station. For example, `#{params[:command]} Metro Center`. Use `#{params[:command]} status` to see current service alerts and advisories.", response_type: 'ephemeral' }
         elsif query == 'random'
           response = Wmata.new.random
-        elsif query == 'alerts'
+        elsif query == 'alerts' || query == 'status'
           response = Wmata.new.alerts
         else
           response = Wmata.new.station(query)
