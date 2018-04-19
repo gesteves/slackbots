@@ -28,7 +28,7 @@ class Memefier
         markalign: 'bottom,center'
       }
       url = Ix.path(original_url).to_url(opts)
-      { text: "<#{url}|#{text.gsub(/\n+/, ' / ')}>", response_type: 'in_channel' }
+      { text: "<#{url}|#{text.gsub(/\n+/, ' ')}>", response_type: 'in_channel' }
     end
   end
 
