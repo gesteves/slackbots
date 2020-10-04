@@ -46,6 +46,22 @@ class Memefier
     end
   end
 
+  def resize(query, opts = {})
+    original_url = URI.extract(query, ['http', 'https'])&.first
+    width = query.gsub(original_url, '').strip.to_i.abs unless original_url.nil?
+    width = 500 if width > 0
+    if original_url.nil?
+      { text: 'You need to include an image to memefy!', response_type: 'ephemeral' }
+    else
+      opts = {
+        w: width,
+        fm: 'jpg'
+      }
+      url = Ix.path(original_url).to_url(opts)
+      { text: url, response_type: 'in_channel' }
+    end
+  end
+
   private
 
   def text_size(text)

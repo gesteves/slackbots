@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   post 'memefier/memefy'
   get  'memefier/memefy'
   post 'memefier/palette'
+  post 'memefier/resize'
   get  'memefier/auth', as: 'memefier_auth'
 
   post 'custom/:action', controller: 'custom'
