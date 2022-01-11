@@ -35,6 +35,8 @@ class Weather
                    author_link: 'https://darksky.net/poweredby/' }
     fields = []
 
+    temp_unit = forecast['flags']['units'] == 'us' ? 'F' : 'C'
+
     unless forecast['alerts'].nil?
       alerts = forecast['alerts'].map { |alert| "<#{alert['uri']}|#{alert['title']}>" }.join("\n")
       fields << { title: 'Alerts ', value: alerts }
@@ -43,9 +45,9 @@ class Weather
     unless forecast['currently'].nil?
       now = forecast['currently']
       if now['temperature'].round == now['apparentTemperature'].round
-        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}°, #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
+        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}°#{temp_unit}, #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°#{temp_unit}"
       else
-        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}° (feels like #{now['apparentTemperature'].round}°), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°"
+        now_text = "#{now['summary'].force_encoding('UTF-8')}, #{now['temperature'].round}°#{temp_unit} (feels like #{now['apparentTemperature'].round}°#{temp_unit}), #{(now['humidity'] * 100).to_i}% humidity, dew point #{now['dewPoint'].round}°#{temp_unit}"
       end
       fields << { title: 'Right now', value: now_text }
     end
@@ -58,7 +60,7 @@ class Weather
       apparentTemperatures = forecast['hourly']['data'].slice(0, 24).map { |d| d['apparentTemperature']}
       high = apparentTemperatures.max.round
       low = apparentTemperatures.min.round
-      fields << { title: 'Next 24 hours', value: "#{forecast['hourly']['summary'].force_encoding('UTF-8').sub(/\.$/, '')}. The high for the next 24 hours is #{high}°, and the low is #{low}°." }
+      fields << { title: 'Next 24 hours', value: "#{forecast['hourly']['summary'].force_encoding('UTF-8').sub(/\.$/, '')}. The high for the next 24 hours is #{high}°#{temp_unit}, and the low is #{low}°#{temp_unit}." }
     end
 
     unless forecast['daily'].nil?
