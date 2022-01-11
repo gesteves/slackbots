@@ -1,10 +1,13 @@
 class Weather
   def search(location)
-    if location.match(/\s+in\s+(celsius|c|metric|si|)$/i)
+    unit_system = if location.match(/\s+in\s+(celsius|c|metric|si)$/i)
       location.sub!(/\s+in\s+(celsius|c|metric|si)$/i, '')
-      unit_system = 'si'
+      'si'
+    elsif location.match(/\s+in\s+(fahrenheit|f|imperial)$/i)
+      location.sub!(/\s+in\s+(fahrenheit|f|imperial)$/i, '')
+      'si'
     else
-      unit_system = 'us'
+      'auto'
     end
 
     gmaps_response = GoogleMaps.new.location(location)
