@@ -14,7 +14,7 @@ class Weather
       lat = gmaps['results'][0]['geometry']['location']['lat']
       long = gmaps['results'][0]['geometry']['location']['lng']
 
-      forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}").body)
+      forecast = JSON.parse(HTTParty.get("https://api.darksky.net/forecast/#{ENV['DARKSKY_API_KEY']}/#{lat},#{long}?units=#{unit_system}").body)
 
       build_response(formatted_address, lat, long, forecast)
     else
