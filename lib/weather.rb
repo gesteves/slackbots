@@ -5,7 +5,7 @@ class Weather
       'si'
     elsif location.match(/\s+in\s+(fahrenheit|f|imperial)$/i)
       location.sub!(/\s+in\s+(fahrenheit|f|imperial)$/i, '')
-      'si'
+      'us'
     else
       'auto'
     end
