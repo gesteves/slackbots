@@ -10,7 +10,7 @@ class FrinkController < ApplicationController
           frink = Frink.new
           response = frink.search(query)
         end
-        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
+        $mixpanel.track(params[:user_id], params[:command], { query: query }) if params[:user_id].present? && params[:command].present?
         render json: response, status: 200
       else
         render text: 'Unauthorized', status: 401
