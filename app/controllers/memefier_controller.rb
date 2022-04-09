@@ -9,7 +9,6 @@ class MemefierController < ApplicationController
         else
           response = Memefier.new.memefy(query)
         end
-        $mixpanel.track(params[:user_id], params[:command]) if params[:user_id].present? && params[:command].present?
         render json: response, status: 200
       else
         render text: 'Unauthorized', status: 401
@@ -28,7 +27,6 @@ class MemefierController < ApplicationController
       else
         response = Memefier.new.palette(query)
       end
-      $mixpanel.track(params[:user_id], params[:command]) unless Rails.env.development?
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
@@ -43,7 +41,6 @@ class MemefierController < ApplicationController
       else
         response = Memefier.new.resize(query)
       end
-      $mixpanel.track(params[:user_id], params[:command]) unless Rails.env.development?
       render json: response, status: 200
     else
       render text: 'Unauthorized', status: 401
